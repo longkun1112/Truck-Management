@@ -38,7 +38,7 @@ const UserManagement = ({ users, deleteUser }) => {
 
   return (
     <div className="Table">
-      <h1 style={{textAlign: 'center', marginTop: "80px"}}>User Management</h1>
+      <h1>Recent Orders</h1>
         <TableContainer
           component={Paper}
           style={{ boxShadow: "0px 13px 20px 0px #80808029" }}

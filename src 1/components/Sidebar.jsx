@@ -24,8 +24,8 @@ const Sidebar = () => {
   }
   console.log(window.innerWidth)
 
-  const navigateHandle = (path ,index) => {
-    navigate(`/${path}`)
+  const navigateHandle = (asd ,index) => {
+    navigate("/cargoType")
     setSelected(index)
   }
   return (
@@ -52,7 +52,7 @@ const Sidebar = () => {
               <div
                 className={selected === index ? "menuItem active" : "menuItem"}
                 key={index}
-                onClick={() => navigateHandle( item.path, index )}
+                onClick={() => navigateHandle("userManagement" ,index)}
                 // onClick={() => navigate('/userManagement')}
                 // onClick={() => setSelected(index)}
               >
