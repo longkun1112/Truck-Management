@@ -1,21 +1,31 @@
+import React, { useState, useEffect } from 'react';
 import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react'
-import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import { connect } from "react-redux";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from "react-toastify";
 
-const AddVehicle = ({contacts, addContact}) => {
+const EditVehicle = ({ contacts, updateContact }) => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const currentContact = contacts.find(
+    (contact) => contact.id === parseInt(id)
+  );
+
+  useEffect(() => {
+    setTruckPlate(currentContact.truckPlate);
+    setCargoType(currentContact.cargoType);
+    setDriver(currentContact.driver);
+    setTruckType(currentContact.truckType);
+    setPrice(currentContact.price);
+    setDimension(currentContact.dimension);
+    setParkingAddress(currentContact.parkingAddress);
+    setProductionYear(currentContact.productionYear);
+    setStatus(currentContact.status);
+    
+  }, [currentContact]);
 
   const [truckPlate, setTruckPlate] = useState("");
-  const [cargoType, setCargoType] = useState([]);
+  const [cargoType, setCargoType] = useState("");
   const [driver, setDriver] = useState("");
   const [truckType, setTruckType] = useState("");
   const [price, setPrice] = useState("");
@@ -27,33 +37,19 @@ const AddVehicle = ({contacts, addContact}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const checkTruckPlateExists = contacts.filter((contact) => 
-      contact.truckPlate === truckPlate ? contact : null
-    )
-
-    if (!truckPlate || !cargoType || !driver || !truckType || !price || !dimension || !parkingAddress || !productionYear || !status) {
+    const checkTruckPlate = contacts.filter((contact) =>
+      contact.truckPlate === truckPlate && contact.id !== currentContact.id
+        ? contact
+        : null
+    );
+    if (!truckPlate || !cargoType || !truckType  || !price || !dimension || !parkingAddress || !productionYear || !status) {
       return toast.warning("Please fill in all fields!!");
     }
-    if (checkTruckPlateExists.length > 0) {
+    if (checkTruckPlate.length > 0) {
       return toast.error("This Truck Plate already exists!!");
     }
-
-    const checkTruckPlateValidation = () => {
-      const regex = /^(\d{2}[A-Z]-\d{4,5})$/;
-      if(truckPlate && regex.test(truckPlate) === false) {
-        return 1;
-      }
-      return 0;
-    }
-
-    console.log(checkTruckPlateValidation())
-
-    if (checkTruckPlateValidation() === 1 ) {
-      return toast.error("This Truck Plate is not valid!!");
-    }
-
     const data = {
-      id: contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 0,
+      id: currentContact.id,
       truckPlate,
       cargoType,
       driver,
@@ -66,44 +62,13 @@ const AddVehicle = ({contacts, addContact}) => {
       description
     };
 
-    addContact(data);
-    toast.success("Contact added successfully!!");
+    updateContact(data);
+    toast.success("Contact updated successfully!!");
     navigate("/");
   }
-
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-const names = [
-  'Computer',
-  'Electronics',
-  'Vegetables',
-  'Kid toys',
-];
-
-  // const [personName, setPersonName] = React.useState<string[]>([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setCargoType(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
   return (
     <div className="MainDash">
-      <h1>Add</h1>
+      <h1>Edit</h1>
       <form onSubmit={handleSubmit}>
       <TextField
         style={{ width: "600px", margin: "5px" }}
@@ -114,26 +79,15 @@ const names = [
         placeholder={"Truck Plate"}
         onChange={(e) => setTruckPlate(e.target.value)}
       />
-      <FormControl sx={{ m: 1, width: 600 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Cargo Type</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={cargoType}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={cargoType.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
+        label="Cargo Type"
+        variant="outlined"
+        value={cargoType}
+          placeholder={"Cargo Type"}
+          onChange={(e) => setCargoType(e.target.value)}
+      />
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
@@ -213,8 +167,8 @@ const names = [
           type='submit'
           color="success"
           style={{width: '180px', height: '50px', fontSize: "18px"}}
-        >Add</Button>
-        </div>
+        >Update </Button>
+      </div>
       </form>
     </div>
   )
@@ -225,9 +179,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addContact: (data) => {
-    dispatch({ type: 'ADD_CONTACT', payload: data });
+  updateContact: (data) => {
+    dispatch({ type: "UPDATE_CONTACT", payload: data });
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddVehicle)
+export default connect(mapStateToProps, mapDispatchToProps)(EditVehicle)

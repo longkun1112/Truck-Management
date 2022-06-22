@@ -12,7 +12,6 @@ import EditVehicle from './screens/EditVehicle';
 import SignInSide from './components/FormLogin/SignIn';
 import AddUserManagement from './screens/AddUserManagement';
 import EditUserManagement from './screens/EditUserManagement';
-import EditCargo from './screens/EditCargo';
 
 function App() {
   return (
@@ -27,7 +26,6 @@ function App() {
           <Route path="/vehicleInformation/add" element={<AddVehicle/>} />
           <Route path="/vehicleInformation/edit/:id" element={<EditVehicle/>} />
           <Route path="/cargoType" element={<CargoType/>} />
-          <Route path="/cargoType/edit/:id" element={<EditCargo/>} />
           <Route path="/userManagement" element={<UserManagement/>} />
           <Route path="/userManagement/add" element={<AddUserManagement/>} />
           <Route path="/userManagement/edit/:id" element={<EditUserManagement/>} />

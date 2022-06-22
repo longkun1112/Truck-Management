@@ -3,6 +3,13 @@ import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 const EditVehicle = ({ contacts, updateContact }) => {
   const { id } = useParams();
@@ -25,7 +32,7 @@ const EditVehicle = ({ contacts, updateContact }) => {
   }, [currentContact]);
 
   const [truckPlate, setTruckPlate] = useState("");
-  const [cargoType, setCargoType] = useState("");
+  const [cargoType, setCargoType] = useState([]);
   const [driver, setDriver] = useState("");
   const [truckType, setTruckType] = useState("");
   const [price, setPrice] = useState("");
@@ -42,6 +49,19 @@ const EditVehicle = ({ contacts, updateContact }) => {
         ? contact
         : null
     );
+
+    const checkTruckPlateValidation = () => {
+      const regex = /^(\d{2}[A-Z]-\d{4,5})$/;
+      if(truckPlate && regex.test(truckPlate) === false) {
+        return 1;
+      }
+      return 0;
+    }
+  
+    if (checkTruckPlateValidation() === 1 ) {
+      return toast.error("This Truck Plate is not valid!!");
+    }
+    
     if (!truckPlate || !cargoType || !truckType  || !price || !dimension || !parkingAddress || !productionYear || !status) {
       return toast.warning("Please fill in all fields!!");
     }
@@ -66,6 +86,39 @@ const EditVehicle = ({ contacts, updateContact }) => {
     toast.success("Contact updated successfully!!");
     navigate("/");
   }
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  
+
+  const names = [
+    'Computer',
+    'Electronics',
+    'Vegetables',
+    'Kid toys',
+  ];
+
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
   return (
     <div className="MainDash">
       <h1>Edit</h1>
@@ -88,6 +141,26 @@ const EditVehicle = ({ contacts, updateContact }) => {
           placeholder={"Cargo Type"}
           onChange={(e) => setCargoType(e.target.value)}
       />
+      {/* <FormControl sx={{ m: 1, width: 600 }}>
+        <InputLabel id="demo-multiple-checkbox-label">Cargo Type</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={personName.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl> */}
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
@@ -185,3 +258,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditVehicle)
+

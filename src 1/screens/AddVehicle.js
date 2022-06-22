@@ -3,19 +3,12 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
 
 const AddVehicle = ({contacts, addContact}) => {
   const navigate = useNavigate();
 
   const [truckPlate, setTruckPlate] = useState("");
-  const [cargoType, setCargoType] = useState([]);
+  const [cargoType, setCargoType] = useState("");
   const [driver, setDriver] = useState("");
   const [truckType, setTruckType] = useState("");
   const [price, setPrice] = useState("");
@@ -35,21 +28,7 @@ const AddVehicle = ({contacts, addContact}) => {
       return toast.warning("Please fill in all fields!!");
     }
     if (checkTruckPlateExists.length > 0) {
-      return toast.error("This Truck Plate already exists!!");
-    }
-
-    const checkTruckPlateValidation = () => {
-      const regex = /^(\d{2}[A-Z]-\d{4,5})$/;
-      if(truckPlate && regex.test(truckPlate) === false) {
-        return 1;
-      }
-      return 0;
-    }
-
-    console.log(checkTruckPlateValidation())
-
-    if (checkTruckPlateValidation() === 1 ) {
-      return toast.error("This Truck Plate is not valid!!");
+      return toast.error("This truck Plate already exists!!");
     }
 
     const data = {
@@ -71,36 +50,6 @@ const AddVehicle = ({contacts, addContact}) => {
     navigate("/");
   }
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-const names = [
-  'Computer',
-  'Electronics',
-  'Vegetables',
-  'Kid toys',
-];
-
-  // const [personName, setPersonName] = React.useState<string[]>([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setCargoType(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
   return (
     <div className="MainDash">
       <h1>Add</h1>
@@ -114,26 +63,15 @@ const names = [
         placeholder={"Truck Plate"}
         onChange={(e) => setTruckPlate(e.target.value)}
       />
-      <FormControl sx={{ m: 1, width: 600 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Cargo Type</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={cargoType}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={cargoType.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
+        label="Cargo Type"
+        variant="outlined"
+        value={cargoType}
+          placeholder={"Cargo Type"}
+          onChange={(e) => setCargoType(e.target.value)}
+      />
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
