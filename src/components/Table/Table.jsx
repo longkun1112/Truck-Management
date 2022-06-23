@@ -82,7 +82,7 @@ const BasicTable =({ contacts, deleteContact }) => {
   const navigate = useNavigate();
   return (
       <div className="Table">
-      <h3>Recent Orders</h3>
+      <h3>Vehicle Information</h3>
         <TableContainer
           component={Paper}
           style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
