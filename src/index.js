@@ -13,9 +13,9 @@ import { UserReducer } from "./redux/reducers/UserReducer";
 import { CargoReducer } from "./redux/reducers/CargoReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-// const store = createStore(UserReducer, composeWithDevTools());
-const store = createStore(Reducer, composeWithDevTools());
+const store = createStore(UserReducer, composeWithDevTools());
 // const store = createStore(CargoReducer, composeWithDevTools());
+// const store = createStore(Reducer, composeWithDevTools());
 
 ReactDOM.render(
   <Provider store={store}>

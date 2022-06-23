@@ -14,6 +14,7 @@ const AddUserManagement = ({users, addUser}) => {
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
+  const [image, setImage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ const AddUserManagement = ({users, addUser}) => {
       user.email === email ? user : null
     )
 
-    if (!name || !email || !dob || !phone || !role ) {
+    if (!name || !email || !dob || !phone || !role || !image ) {
       return toast.warning("Please fill in all fields!!");
     }
     if (checkEmailExists.length > 0) {
@@ -35,6 +36,7 @@ const AddUserManagement = ({users, addUser}) => {
       dob,
       phone,
       role,
+      image
     };
 
     addUser(data);
@@ -90,6 +92,15 @@ const AddUserManagement = ({users, addUser}) => {
         value={role}
         placeholder={"Role"}
         onChange={(e) => setRole(e.target.value)}
+      />
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
+        label="Image"
+        variant="outlined"
+        value={image}
+        placeholder={"Image"}
+        onChange={(e) => setImage(e.target.value)}
       />
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>

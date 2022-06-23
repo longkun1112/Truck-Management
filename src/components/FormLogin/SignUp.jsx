@@ -13,35 +13,54 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const theme = createTheme();
 
-export default function SignIn() {
+const SignUp = ({users, addUser}) => {
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [dob, setDob] = useState("");
+  const [phone, setPhone] = useState("");
+  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // const data = new FormData(event.currentTarget);
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
+
+    const checkEmailExists = users.filter((user) => 
+      user.email === email ? user : null
+    )
+
+    if (!name || !email || !phone || !image ) {
+      return toast.warning("Please fill in all fields!!");
+    }
+    if (checkEmailExists.length > 0) {
+      return toast.error("This Email is already exists!!");
+    }
+
+    const data = {
+      id: users.length > 0 ? users[users.length - 1].id + 1 : 0,
+      name,
+      email,
+      dob,
+      phone,
+      role: 'Operator',
+      image
+    };
+
+    addUser(data);
+    toast.success("User Sign Up successfully!!");
+    navigate("/");
   };
 
   return (
@@ -60,7 +79,7 @@ export default function SignIn() {
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -87,6 +106,40 @@ export default function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              label="Name"
+              id="name"
+              autoComplete="current-password"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="image"
+              label="Image"
+              id="image"
+              autoComplete="current-password"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="phone"
+              label="Phone"
+              id="phone"
+              autoComplete="current-password"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -96,26 +149,24 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => navigate('/')}
             >
-              Sign In
+              Sign Up
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <div onClick={() => {navigate('/signup')}} variant="body2" >
-                  {"Don't have an account? Sign Up"}
-                </div>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-  );
+  )
 }
+
+const mapStateToProps = (state) => ({
+  users: state,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addUser: (data) => {
+    dispatch({ type: 'ADD_USER', payload: data });
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
