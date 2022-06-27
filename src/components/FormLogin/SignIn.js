@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,7 +12,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -35,6 +37,23 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [users, setUsers] = useState([])
+  const getUsers = async () => {
+    await axios.get('http://localhost:8000/users')
+    .then(function (response) {
+      console.log(response.data);
+      setUsers(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getUsers();
+    console.log('test', users)
+  }, [])
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -42,6 +61,16 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const emailLogin = users.find(user => user.email === email)
+    console.log('test',emailLogin)
+    const checkPasswordCorrect = emailLogin?.password === password;
+    if(emailLogin && checkPasswordCorrect) {
+        navigate('/')
+        toast.success("Login successfully!!");
+        localStorage.setItem('user', JSON.stringify(emailLogin))
+    } else {
+      toast.error("Email or Password is not correct!!");
+    }
   };
 
   return (
@@ -96,7 +125,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => navigate('/')}
+              // onClick={() => navigate('/')}
             >
               Sign In
             </Button>
@@ -107,9 +136,9 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <div onClick={() => {navigate('/signup')}} variant="body2" >
+                <NavLink to='/SignUp' variant="body2">
                   {"Don't have an account? Sign Up"}
-                </div>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>

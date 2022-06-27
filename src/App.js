@@ -10,10 +10,10 @@ import MyAccount from './screens/MyAccount';
 import AddVehicle from './screens/AddVehicle';
 import EditVehicle from './screens/EditVehicle';
 import SignInSide from './components/FormLogin/SignIn';
-import SignUp from './components/FormLogin/SignUp';
 import AddUserManagement from './screens/AddUserManagement';
 import EditUserManagement from './screens/EditUserManagement';
 import EditCargo from './screens/EditCargo';
+import SignUp from './components/FormLogin/SignUp';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Sidebar/>
         <Routes>
           <Route path="/login" element={<SignInSide/>} />
-          <Route path="/signup" element={<SignUp/>} />
+          <Route path="/SignUp" element={<SignUp/>} />
           <Route exact path="/" element={<MainDash/>} />
           <Route path="/vehicleInformation" element={<MainDash/>} />
           <Route path="/vehicleInformation/add" element={<AddVehicle/>} />
