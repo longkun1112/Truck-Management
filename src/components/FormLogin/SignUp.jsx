@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,55 +12,55 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from "react-toastify";
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 const theme = createTheme();
 
-const SignUp = ({users, addUser}) => {
-
+export default function SignUp() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [dob, setDob] = useState("");
-  const [phone, setPhone] = useState("");
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
-
-    const checkEmailExists = users.filter((user) => 
-      user.email === email ? user : null
-    )
-
-    if (!name || !email || !phone || !image ) {
-      return toast.warning("Please fill in all fields!!");
-    }
-    if (checkEmailExists.length > 0) {
-      return toast.error("This Email is already exists!!");
-    }
-
-    const data = {
-      id: users.length > 0 ? users[users.length - 1].id + 1 : 0,
-      name,
-      email,
-      dob,
-      phone,
-      role: 'Operator',
-      image
-    };
-
-    addUser(data);
-    toast.success("User Sign Up successfully!!");
-    navigate("/");
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+    });
+    await axios.post('http://localhost:8000/users', {
+        name,
+        password,
+        email,
+        dob,
+        phone,
+        role: "Operator",
+        image: image ? image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFPSLHeCARXVSGgCgQNk43vrya5cinr6McfmARLozzMg&s'
+      })
+      .then(() => {
+        toast.success("User register successfully!!");
+        navigate("/");
+      });
   };
 
   return (
@@ -79,7 +79,7 @@ const SignUp = ({users, addUser}) => {
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign Up
+            Register
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -112,8 +112,8 @@ const SignUp = ({users, addUser}) => {
               fullWidth
               name="name"
               label="Name"
+              type="text"
               id="name"
-              autoComplete="current-password"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -121,25 +121,35 @@ const SignUp = ({users, addUser}) => {
               margin="normal"
               required
               fullWidth
-              name="image"
-              label="Image"
-              id="image"
-              autoComplete="current-password"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+              name="phone"
+              label="Phone"
+              type="number"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="phone"
-              label="Phone"
-              id="phone"
-              autoComplete="current-password"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              name="dob"
+              label="Date Of Birth"
+              type="text"
+              id="dob"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
             />
-            
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="image"
+              label="Image"
+              type="text"
+              id="image"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -149,24 +159,26 @@ const SignUp = ({users, addUser}) => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              // onClick={() => navigate('/')}
             >
-              Sign Up
+              Sign In
             </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                    {/* <NavLink to='login' variant="body2">
+                    {"Sign In"}
+                    </NavLink> */}
+              </Grid>
+            </Grid>
           </Box>
         </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-  )
+  );
 }
-
-const mapStateToProps = (state) => ({
-  users: state,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  addUser: (data) => {
-    dispatch({ type: 'ADD_USER', payload: data });
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

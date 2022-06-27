@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Table.css";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const makeStyle1=(role)=>{
   if(role === 'Admin')
@@ -18,23 +20,48 @@ const makeStyle1=(role)=>{
       color: 'green',
     }
   }
-  else if(role === 'Driver')
+  else if(role === 'Operator')
   {
-    return{
-      background: '#ffadad8f',
-      color: 'red',
-    }
-  }
-  else{
     return{
       background: '#59bfff',
       color: 'white',
     }
   }
+  else{
+    return{
+      background: '#ffadad8f',
+      color: 'red',
+    }
+  }
 }
 
-const UserManagement = ({ users, deleteUser }) => {
+const UserManagement = () => {
+  // const UserManagement = ({ users, deleteUser }) => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState([])
+  const getUsers = async () => {
+    await axios.get('http://localhost:8000/users')
+    .then(function (response) {
+      console.log(response.data);
+      setUsers(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getUsers();
+    console.log('test', users)
+  }, [])
+
+  const deleteUser = async (id) => {
+    await axios.delete(`http://localhost:8000/users/${id}`)
+    .then(() => {
+      toast.success("Users deleted successfully!!");
+      getUsers()
+    });
+  }
 
   return (
     <div className="Table">
@@ -48,8 +75,7 @@ const UserManagement = ({ users, deleteUser }) => {
               <TableRow>
                 <TableCell align="left">Id</TableCell>
                 <TableCell align="left">Email</TableCell>
-                <TableCell align="left">First Name</TableCell>
-                <TableCell align="left">Last Name</TableCell>
+                <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Phone</TableCell>
                 <TableCell align="left">Date Of Birth</TableCell>
                 <TableCell align="left">Role Management</TableCell>
@@ -67,7 +93,6 @@ const UserManagement = ({ users, deleteUser }) => {
                   <TableCell component="th" scope="row">
                     {user.email}
                   </TableCell>
-                  <TableCell align="left">{user.email}</TableCell>
                   <TableCell align="left">{user.name}</TableCell>
                   <TableCell align="left">{user.phone}</TableCell>
                   <TableCell align="left">{user.dob}</TableCell>

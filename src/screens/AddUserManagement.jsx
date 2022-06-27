@@ -4,8 +4,15 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './style.css';
+import axios from 'axios';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const AddUserManagement = ({users, addUser}) => {
+const AddUserManagement = () => {
+  // const AddUserManagement = ({users, addUser}) => {
   const navigate = useNavigate();
 
   // const [truckPlate, setTruckPlate] = useState("");
@@ -14,22 +21,23 @@ const AddUserManagement = ({users, addUser}) => {
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
+  const [image, setImage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const checkEmailExists = users.filter((user) => 
-      user.email === email ? user : null
-    )
+    // const checkEmailExists = users.filter((user) => 
+    //   user.email === email ? user : null
+    // )
 
     if (!name || !email || !dob || !phone || !role ) {
       return toast.warning("Please fill in all fields!!");
     }
-    if (checkEmailExists.length > 0) {
-      return toast.error("This Email is already exists!!");
-    }
+    // if (checkEmailExists.length > 0) {
+    //   return toast.error("This Email is already exists!!");
+    // }
 
     const data = {
-      id: users.length > 0 ? users[users.length - 1].id + 1 : 0,
+      // id: users.length > 0 ? users[users.length - 1].id + 1 : 0,
       name,
       email,
       dob,
@@ -37,10 +45,24 @@ const AddUserManagement = ({users, addUser}) => {
       role,
     };
 
-    addUser(data);
-    toast.success("User added successfully!!");
-    navigate("/userManagement");
+    await axios.post('http://localhost:8000/users', {
+      name,
+      email,
+      dob,
+      phone,
+      role,
+      image: image ? image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFPSLHeCARXVSGgCgQNk43vrya5cinr6McfmARLozzMg&s'
+    })
+    .then(() => {
+      toast.success("User added successfully!!");
+      navigate("/userManagement");
+    });
+    // addUser(data);
   }
+
+  const handleChange = (event) => {
+    setRole(event.target.value);
+  };
 
   return (
     <div className="MainDash">
@@ -82,7 +104,7 @@ const AddUserManagement = ({users, addUser}) => {
         placeholder={"Date Of Birth"}
         onChange={(e) => setDob(e.target.value)}
       />
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Role"
@@ -90,6 +112,29 @@ const AddUserManagement = ({users, addUser}) => {
         value={role}
         placeholder={"Role"}
         onChange={(e) => setRole(e.target.value)}
+      /> */}
+        <FormControl sx={{ m: 1, width: 600 }}>
+          <InputLabel id="demo-simple-select-label">Role</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={role}
+            label="Role"
+            onChange={handleChange}
+          >
+            <MenuItem value={"Admin"}>Admin</MenuItem>
+            <MenuItem value={"Operator"}>Operator</MenuItem>
+            <MenuItem value={"Driver"}>Driver</MenuItem>
+          </Select>
+        </FormControl>
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
+        label="Image"
+        variant="outlined"
+        value={image}
+        placeholder={"Image"}
+        onChange={(e) => setImage(e.target.value)}
       />
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>
@@ -116,3 +161,5 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUserManagement)
+
+    

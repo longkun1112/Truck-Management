@@ -35,7 +35,7 @@ const AddVehicle = ({contacts, addContact}) => {
       return toast.warning("Please fill in all fields!!");
     }
     if (checkTruckPlateExists.length > 0) {
-      return toast.error("This Truck Plate already exists!");
+      return toast.error("This Truck Plate already exists!!");
     }
 
     const checkTruckPlateValidation = () => {
@@ -49,7 +49,7 @@ const AddVehicle = ({contacts, addContact}) => {
     console.log(checkTruckPlateValidation())
 
     if (checkTruckPlateValidation() === 1 ) {
-      return toast.error("This Truck Plate is not valid!!         The correct Truck Plate form is AAB-AAAAA");
+      return toast.error("This Truck Plate is not valid!!");
     }
 
     const data = {

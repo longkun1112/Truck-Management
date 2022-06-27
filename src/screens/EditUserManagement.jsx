@@ -3,43 +3,66 @@ import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
+import axios from 'axios';
 
-const EditUserManagement = ({users, updateUser}) => {
+const EditUserManagement = () => {
+  // const EditUserManagement = ({users, updateUser}) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const currentUser = users.find(
-    (user) => user.id === parseInt(id)
-  );
+  const [user, setUser] = useState();
+  // const currentUser = users.find(
+  //   (user) => user.id === parseInt(id)
+  // );
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
+
 
   useEffect(() => {
-    setName(currentUser.name);
-    setEmail(currentUser.email);
-    setDob(currentUser.dob);
-    setPhone(currentUser.phone);
-    setRole(currentUser.role);
-  }, [currentUser]);
+    // setName( user?.name);
+    // setEmail( user?.email);
+    // setDob( user?.dob);
+    // setPhone( user?.phone);
+    // setRole( user?.role);
+    getUserById(id);
+    console.log('test', user?.name)
+    console.log('id', id)
+  }, []);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
-  const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("");
+  const getUserById = async (id) => {
+    await axios.get(`http://localhost:8000/users/${id}`)
+    .then(function (response) {
+      console.log(response.data);
+      setUser(response.data)
+      setName( user?.name);
+      setEmail( user?.email);
+      setDob( user?.dob);
+      setPhone( user?.phone);
+      setRole( user?.role);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+      
+  }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const checkEmailExists = users.filter((user) => 
-      user.email === email && user.id !== currentUser.id ? user : null
-    )
+    // const checkEmailExists = users.filter((user) => 
+    //   user.email === email && user.id !== currentUser.id ? user : null
+    // )
 
     if (!name || !email || !dob || !phone || !role ) {
       return toast.warning("Please fill in all fields!!");
     }
-    if (checkEmailExists.length > 0) {
-      return toast.error("This Email is already exists!!");
-    }
+    // if (checkEmailExists.length > 0) {
+    //   return toast.error("This Email is already exists!!");
+    // }
 
     const data = {
-      id: currentUser.id,
+      // id: currentUser.id,
       name,
       email,
       dob,
@@ -47,21 +70,34 @@ const EditUserManagement = ({users, updateUser}) => {
       role,
     };
 
-    updateUser(data);
-    toast.success("User edited successfully!!");
-    navigate("/userManagement");
+    // updateUser(data);
+    await axios.put(`http://localhost:8000/users/${id}`, {
+      name,
+      email,
+      dob,
+      phone,
+      role,
+    })
+    .then(() => {
+      toast.success("Users edited successfully!!");
+      navigate("/userManagement");
+      // getUsers()
+    });
+    // toast.success("User edited successfully!!");
+    // navigate("/userManagement");
   }
 
   return (
     <div className="MainDash">
       <h1 style={{marginTop: '80px'}}>Edit</h1>
+      
       <form style={{width: "80%", margin: 'auto'}} onSubmit={handleSubmit}>
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Name"
         variant="outlined"
-        value={name}
+        value={name || ''}
         placeholder={"Name"}
         onChange={(e) => setName(e.target.value)}
       />
@@ -70,7 +106,7 @@ const EditUserManagement = ({users, updateUser}) => {
         type="text"
         label="Email"
         variant="outlined"
-        value={email}
+        value={email || ''}
         placeholder={"Email"}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -79,7 +115,7 @@ const EditUserManagement = ({users, updateUser}) => {
         type="text"
         label="Phone"
         variant="outlined"
-        value={phone}
+        value={phone || ''}
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
       />
@@ -88,7 +124,7 @@ const EditUserManagement = ({users, updateUser}) => {
         type="text"
         label="Date Of Birth"
         variant="outlined"
-        value={dob}
+        value={dob || ''}
         placeholder={"Date Of Birth"}
         onChange={(e) => setDob(e.target.value)}
       />
@@ -97,7 +133,7 @@ const EditUserManagement = ({users, updateUser}) => {
         type="text"
         label="Role"
         variant="outlined"
-        value={role}
+        value={role || ''}
         placeholder={"Role"}
         onChange={(e) => setRole(e.target.value)}
       />

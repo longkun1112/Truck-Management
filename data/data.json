@@ -1,0 +1,13 @@
+{
+    "users": [
+      { "id": 1, "name": "Mirana", "password": "12345", "phone": "1234567890", "email": "email@email.com", "role": "Admin", "dob": "1/1/1995" },
+      { "id": 2, "name": "Mirana", "password": "12345", "phone": "1234567890", "email": "email@email.com", "role": "Admin", "dob": "1/1/1995" },
+      { "id": 3, "name": "Mirana", "password": "12345", "phone": "1234567890", "email": "email@email.com", "role": "Admin", "dob": "1/1/1995" },
+      { "id": 4, "name": "Mirana", "password": "12345", "phone": "1234567890", "email": "email@email.com", "role": "Admin", "dob": "1/1/1995" },
+      { "id": 5, "name": "Mirana", "password": "12345", "phone": "1234567890", "email": "email@email.com", "role": "Admin", "dob": "1/1/1995" }
+    ],
+    "comments": [
+      { "id": 1, "body": "some comment", "postId": 1 }
+    ],
+    "profile": { "name": "typicode" }
+  }

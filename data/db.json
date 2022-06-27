@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "name": "asd",
+      "password": "12345",
+      "email": "email@email.com",
+      "dob": "sadsad",
+      "phone": "123213",
+      "role": "Operator",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfaIXB31PCuFTP37r7DP4D9GfeER94hOfV5eTJeWqIkg&s",
+      "id": 6
+    },
+    {
+      "name": "123",
+      "email": "123",
+      "dob": "123",
+      "phone": "123",
+      "role": "Admin",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkIdpg477dCMhtl-rmZLVD-wyyY5qIbojV1A&usqp=CAU",
+      "id": 7
+    },
+    {
+      "name": "Lina",
+      "email": "123@gamil",
+      "dob": "1123",
+      "phone": "12345",
+      "role": "Operator",
+      "image": "https://cf.shopee.com.my/file/7c0e7fb06db92949630f9ab4bb992cd7",
+      "id": 9
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
