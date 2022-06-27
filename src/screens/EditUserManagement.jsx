@@ -14,11 +14,12 @@ const EditUserManagement = () => {
   //   (user) => user.id === parseInt(id)
   // );
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [phone, setPhone] = useState('');
   const [role, setRole] = useState('');
-
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     // setName( user?.name);
@@ -36,11 +37,11 @@ const EditUserManagement = () => {
     .then(function (response) {
       console.log(response.data);
       setUser(response.data)
-      setName( user?.name);
-      setEmail( user?.email);
-      setDob( user?.dob);
-      setPhone( user?.phone);
-      setRole( user?.role);
+      setName(user?.name);
+      setEmail(user?.email);
+      setDob(user?.dob);
+      setPhone(user?.phone);
+      setRole(user?.role);
     })
     .catch(function (error) {
       console.log(error);
@@ -74,9 +75,11 @@ const EditUserManagement = () => {
     await axios.put(`http://localhost:8000/users/${id}`, {
       name,
       email,
+      password: password ? password : user.password,
       dob,
       phone,
       role,
+      image: image ? image : user.image
     })
     .then(() => {
       toast.success("Users edited successfully!!");
@@ -136,6 +139,15 @@ const EditUserManagement = () => {
         value={role || ''}
         placeholder={"Role"}
         onChange={(e) => setRole(e.target.value)}
+      />
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
+        label="Image"
+        variant="outlined"
+        value={image}
+        placeholder={"Image"}
+        onChange={(e) => setImage(e.target.value)}
       />
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>

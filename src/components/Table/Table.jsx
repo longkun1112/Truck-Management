@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import "./Table.css";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 
 function createData(name, trackingId, date, status) {
   return { name, trackingId, date, status };
@@ -79,6 +80,23 @@ const makeStyle1=(status)=>{
 
 
 const BasicTable =({ contacts, deleteContact }) => {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser) {
+      setUser(currentUser);
+    }
+    console.log("user", user)
+  }, []);
+
+  const add = () => {
+    if(user.role === 'Admin') {
+      navigate('/vehicleInformation/add')
+    } else {
+      toast.error("You don't have permission to add new information")
+    }
+  }
   const navigate = useNavigate();
   return (
       <div className="Table">
@@ -100,7 +118,7 @@ const BasicTable =({ contacts, deleteContact }) => {
                 <TableCell align="left">Parking Address</TableCell>
                 <TableCell align="left">Production<br></br> Year</TableCell>
                 <TableCell align="left">Status</TableCell>
-                <TableCell align="left" className="Details" onClick={() => navigate('/vehicleInformation/add')}>Add </TableCell>
+                <TableCell align="left" className="Details" onClick={() => add()}>Add </TableCell>
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
