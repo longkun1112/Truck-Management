@@ -6,6 +6,7 @@ import { SidebarData } from "../Data/Data";
 import { UilBars } from "@iconscout/react-unicons";
 import { motion } from "framer-motion";
 import { Link, useNavigate  } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [selected, setSelected] = useState(0);
@@ -27,6 +28,12 @@ const Sidebar = () => {
   const navigateHandle = (path ,index) => {
     navigate(`/${path}`)
     setSelected(index)
+  }
+
+  const logout = () => {
+    localStorage.removeItem('user')
+    toast.success("Logout successfully");
+    navigate('/login')
   }
   return (
     <>
@@ -62,7 +69,7 @@ const Sidebar = () => {
           );
         })}
         {/* signoutIcon */}
-        <div className="menuItem" onClick={() => navigate('/login')}>
+        <div className="menuItem" onClick={() => logout()}>
           <UilSignOutAlt />
         </div>
       </div>
