@@ -3,13 +3,7 @@ import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+
 
 const EditVehicle = ({ contacts, updateContact }) => {
   const { id } = useParams();

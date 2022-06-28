@@ -1,9 +1,9 @@
 {
   "users": [
     {
-      "name": "asd",
+      "name": "Invoker",
       "password": "12345",
-      "email": "email@email.com",
+      "email": "invoker@email.com",
       "dob": "sadsad",
       "phone": "123213",
       "role": "Operator",
@@ -11,17 +11,19 @@
       "id": 6
     },
     {
-      "name": "123",
-      "email": "123",
-      "dob": "123",
-      "phone": "123",
+      "name": "Lisa",
+      "password": "12345",
+      "email": "lisa@gmail.com",
+      "dob": "Jun 09",
+      "phone": "12345678",
       "role": "Admin",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkIdpg477dCMhtl-rmZLVD-wyyY5qIbojV1A&usqp=CAU",
       "id": 7
     },
     {
       "name": "Lina",
-      "email": "123@gamil",
+      "password": "12345",
+      "email": "lina@gamil",
       "dob": "1123",
       "phone": "12345",
       "role": "Operator",
@@ -29,11 +31,26 @@
       "id": 9
     }
   ],
-  "comments": [
+  "cargoes": [
     {
       "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "type": "Computer"
+    },
+    {
+      "id": 2,
+      "type": "Electronics"
+    },
+    {
+      "id": 3,
+      "type": "Vegetables"
+    },
+    {
+      "type": "Kid toys",
+      "id": 4
+    },
+    {
+      "type": "Toys",
+      "id": 5
     }
   ],
   "profile": {

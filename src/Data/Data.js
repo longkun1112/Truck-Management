@@ -42,7 +42,7 @@ export const SidebarData = [
   {
     icon: UilChart,
     heading: 'Analytics',
-    path: ''
+    path: 'test'
   },
 ];
 
