@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
 import axios from 'axios';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const EditUserManagement = () => {
+const EditUserManagement = (props) => {
+  const location = useLocation();
   // const EditUserManagement = ({users, updateUser}) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,13 +17,13 @@ const EditUserManagement = () => {
   // const currentUser = users.find(
   //   (user) => user.id === parseInt(id)
   // );
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [dob, setDob] = useState('');
-  const [phone, setPhone] = useState('');
-  const [role, setRole] = useState('');
-  const [image, setImage] = useState("");
+  const [name, setName] = useState(location.state.name);
+  const [password, setPassword] = useState(location.state.password);
+  const [email, setEmail] = useState(location.state.email);
+  const [dob, setDob] = useState(location.state.dob);
+  const [phone, setPhone] = useState(location.state.phone);
+  const [role, setRole] = useState(location.state.role);
+  const [image, setImage] = useState(location.state.image);
 
   useEffect(() => {
     // setName( user?.name);
@@ -30,6 +34,7 @@ const EditUserManagement = () => {
     getUserById(id);
     console.log('test', user?.name)
     console.log('id', id)
+    console.log('location', location)
   }, []);
 
   const getUserById = async (id) => {
@@ -37,11 +42,6 @@ const EditUserManagement = () => {
     .then(function (response) {
       console.log(response.data);
       setUser(response.data)
-      setName(user?.name);
-      setEmail(user?.email);
-      setDob(user?.dob);
-      setPhone(user?.phone);
-      setRole(user?.role);
     })
     .catch(function (error) {
       console.log(error);
@@ -93,7 +93,7 @@ const EditUserManagement = () => {
   return (
     <div className="MainDash">
       <h1 style={{marginTop: '80px'}}>Edit</h1>
-      
+      <div>{location.state?.name}</div>
       <form style={{width: "80%", margin: 'auto'}} onSubmit={handleSubmit}>
       <TextField
         style={{ width: "600px", margin: "5px" }}
@@ -116,13 +116,22 @@ const EditUserManagement = () => {
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
+        label="Password"
+        variant="outlined"
+        value={password || ''}
+        placeholder={"Password"}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="text"
         label="Phone"
         variant="outlined"
         value={phone || ''}
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
       />
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Date Of Birth"
@@ -130,7 +139,17 @@ const EditUserManagement = () => {
         value={dob || ''}
         placeholder={"Date Of Birth"}
         onChange={(e) => setDob(e.target.value)}
-      />
+      /> */}
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Date Of Birth"
+            value={dob}
+            onChange={(newValue) => {
+              setDob(newValue);
+            }}
+            renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
+          />
+        </LocalizationProvider>
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"

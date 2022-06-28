@@ -1,45 +1,51 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import { toast } from "react-toastify";
+import axios from 'axios';
 
-const EditCargo = ({cargoTypes, updateCargo}) => {
+const EditCargo = () => {
+  // const EditCargo = ({cargoTypes, updateCargo}) => {
+  const location = useLocation();
   const { id } = useParams();
-  const [cargoType, setCargoType] = useState("");
+  const [cargoType, setCargoType] = useState(location.state.type);
   const navigate = useNavigate();
-  const currentCargo = cargoTypes.find(
-    (cargo) => cargo.id === parseInt(id)
-  );
+  // const currentCargo = cargoTypes.find(
+  //   (cargo) => cargo.id === parseInt(id)
+  // );
 
-  useEffect(() => {
-    setCargoType(currentCargo.cargoType);
-  }, [currentCargo]);
+  // useEffect(() => {
+  //   setCargoType(currentCargo.cargoType);
+  // }, [currentCargo]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const checkCargoExists = cargoTypes.filter((cargoType) => 
-    cargoTypes.cargoType === cargoType && cargoTypes.id !== currentCargo.id ? cargoType : null
-    )
+    // const checkCargoExists = cargoTypes.filter((cargoType) => 
+    // cargoTypes.cargoType === cargoType && cargoTypes.id !== currentCargo.id ? cargoType : null
+    // )
 
     if (!cargoType) {
       return toast.warning("Please fill in all fields!!");
     }
-    if (checkCargoExists.length > 0) {
-      return toast.error("This Cargo Type is already exists!!");
-    }
+    // if (checkCargoExists.length > 0) {
+    //   return toast.error("This Cargo Type is already exists!!");
+    // }
 
     const data = {
-      id: currentCargo.id,
+      // id: currentCargo.id,
       cargoType,
     };
 
-    updateCargo(data);
-    toast.success("Cargo Type edited successfully!!");
-    navigate("/cargoType");
+    // updateCargo(data);
+    await axios.put(`http://localhost:8000/cargoes/${id}`, {type: cargoType})
+    .then(() => {
+      toast.success("Cargo Type edited successfully!!");
+      navigate("/cargoType");
+    })
   }
 
   return (

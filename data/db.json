@@ -2,10 +2,10 @@
   "users": [
     {
       "name": "Invoker",
-      "password": "12345",
       "email": "invoker@email.com",
-      "dob": "sadsad",
-      "phone": "123213",
+      "password": "12345",
+      "dob": "123",
+      "phone": "0099",
       "role": "Operator",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfaIXB31PCuFTP37r7DP4D9GfeER94hOfV5eTJeWqIkg&s",
       "id": 6
@@ -22,9 +22,9 @@
     },
     {
       "name": "Lina",
-      "password": "12345",
       "email": "lina@gamil",
-      "dob": "1123",
+      "password": "12345",
+      "dob": "2022-05-04T09:37:06.000Z",
       "phone": "12345",
       "role": "Operator",
       "image": "https://cf.shopee.com.my/file/7c0e7fb06db92949630f9ab4bb992cd7",
@@ -33,12 +33,12 @@
   ],
   "cargoes": [
     {
-      "id": 1,
-      "type": "Computer"
+      "type": "Computer",
+      "id": 1
     },
     {
-      "id": 2,
-      "type": "Electronics"
+      "type": "Electronics",
+      "id": 2
     },
     {
       "id": 3,
@@ -49,7 +49,7 @@
       "id": 4
     },
     {
-      "type": "Toys",
+      "type": "123",
       "id": 5
     }
   ],
