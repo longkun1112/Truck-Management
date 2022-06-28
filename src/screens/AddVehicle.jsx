@@ -17,7 +17,8 @@ const AddVehicle = ({contacts, addContact}) => {
 
   const [truckPlate, setTruckPlate] = useState("");
   const [cargoType, setCargoType] = useState([]);
-  const [driver, setDriver] = useState("");
+  const [users, setUsers] = useState([]);
+  const [driver, setDriver] = useState('');
   const [truckType, setTruckType] = useState("");
   const [price, setPrice] = useState("");
   const [dimension, setDimension] = useState("");
@@ -83,6 +84,14 @@ const AddVehicle = ({contacts, addContact}) => {
     },
   };
 
+  const handleChangeDriver = (event) => {
+    setDriver(event.target.value);
+  };
+
+  const handleChangeStatus = (event) => {
+    setStatus(event.target.value);
+  };
+
 const [names, setNames] = useState([
   // 'Computer',
   // 'Electronics',
@@ -101,9 +110,22 @@ const getCargoType = async () => {
   });
 }
 
+const getUsers = async () => {
+  await axios.get('http://localhost:8000/users')
+  .then(function (response) {
+    console.log('users' ,response.data)
+    setUsers(response.data)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 useEffect(() => {
   getCargoType();
+  getUsers();
   console.log('test', names)
+  console.log('users', users)
 }, [])
 
   // const [personName, setPersonName] = React.useState<string[]>([]);
@@ -145,13 +167,27 @@ useEffect(() => {
         >
           {names.map((name) => (
             <MenuItem key={name.id} value={name.type}>
-              <Checkbox checked={cargoType.indexOf(name.id) > -1} />
+              <Checkbox checked={cargoType.indexOf(name.type) > -1} />
               <ListItemText primary={name.type} />
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-      <TextField
+      <FormControl sx={{ m: 1, width: 600 }}>
+        <InputLabel id="demo-simple-select-label">Driver</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={driver}
+          label="Driver"
+          onChange={handleChangeDriver}
+        >
+          {users.map((user) => (
+            <MenuItem value={user.name}>{user.name}</MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Driver"
@@ -159,10 +195,10 @@ useEffect(() => {
         value={driver}
           placeholder={"Driver"}
           onChange={(e) => setDriver(e.target.value)}
-      />
+      /> */}
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Truck Type"
         variant="outlined"
         placeholder="Truck Type"
@@ -171,7 +207,7 @@ useEffect(() => {
       />
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Price"
         variant="outlined"
         value={price}
@@ -198,14 +234,29 @@ useEffect(() => {
       />
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Production Year"
         variant="outlined"
         placeholder="Production Year"
         value={productionYear}
         onChange={(e) => setProductionYear(e.target.value)}
       />
-      <TextField
+      <FormControl sx={{ m: 1, width: 600 }}>
+        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={status}
+          label="Status"
+          onChange={handleChangeStatus}
+        >
+          <MenuItem value={""}></MenuItem>
+          <MenuItem value={"New"}>New</MenuItem>
+          <MenuItem value={"In-used"}>In-Used</MenuItem>
+          <MenuItem value={"Suspended"}>Suspended</MenuItem>
+        </Select>
+      </FormControl>
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Status"
@@ -213,7 +264,7 @@ useEffect(() => {
         placeholder="Status"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-      />
+      /> */}
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"

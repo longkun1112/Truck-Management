@@ -15,6 +15,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function Copyright(props) {
   return (
@@ -125,7 +128,20 @@ export default function SignUp() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
-            <TextField
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                disableFuture
+                label="Date Of Birth"
+                openTo="year"
+                views={['year', 'month', 'day']}
+                value={dob}
+                onChange={(newValue) => {
+                  setDob(newValue);
+                }}
+                renderInput={(params) => <TextField style={{width: "500px"}} {...params} />}
+              />
+            </LocalizationProvider>
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -135,7 +151,7 @@ export default function SignUp() {
               id="dob"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
-            />
+            /> */}
             <TextField
               margin="normal"
               required

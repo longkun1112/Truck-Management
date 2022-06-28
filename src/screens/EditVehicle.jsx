@@ -3,7 +3,10 @@ import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const EditVehicle = ({ contacts, updateContact }) => {
   const { id } = useParams();
@@ -24,6 +27,14 @@ const EditVehicle = ({ contacts, updateContact }) => {
     setStatus(currentContact.status);
     
   }, [currentContact]);
+
+  const handleChangeDriver = (event) => {
+    setDriver(event.target.value);
+  };
+
+  const handleChangeStatus = (event) => {
+    setStatus(event.target.value);
+  };
 
   const [truckPlate, setTruckPlate] = useState("");
   const [cargoType, setCargoType] = useState([]);
@@ -155,7 +166,7 @@ const EditVehicle = ({ contacts, updateContact }) => {
           ))}
         </Select>
       </FormControl> */}
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Driver"
@@ -163,10 +174,25 @@ const EditVehicle = ({ contacts, updateContact }) => {
         value={driver}
           placeholder={"Driver"}
           onChange={(e) => setDriver(e.target.value)}
-      />
+      /> */}
+      <FormControl sx={{ m: 1, width: 600 }}>
+        <InputLabel id="demo-simple-select-label">Driver</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={driver}
+          label="Driver"
+          onChange={handleChangeDriver}
+        >
+          <MenuItem value={""}></MenuItem>
+          <MenuItem value={"Invoker"}>Invoker</MenuItem>
+          <MenuItem value={"Lina"}>Lina</MenuItem>
+          <MenuItem value={"Lisa"}>Lisa</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Truck Type"
         variant="outlined"
         placeholder="Truck Type"
@@ -175,7 +201,7 @@ const EditVehicle = ({ contacts, updateContact }) => {
       />
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Price"
         variant="outlined"
         value={price}
@@ -202,14 +228,14 @@ const EditVehicle = ({ contacts, updateContact }) => {
       />
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Production Year"
         variant="outlined"
         placeholder="Production Year"
         value={productionYear}
         onChange={(e) => setProductionYear(e.target.value)}
       />
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Status"
@@ -217,7 +243,22 @@ const EditVehicle = ({ contacts, updateContact }) => {
         placeholder="Status"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-      />
+      /> */}
+      <FormControl sx={{ m: 1, width: 600 }}>
+        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={status}
+          label="Status"
+          onChange={handleChangeStatus}
+        >
+          <MenuItem value={""}></MenuItem>
+          <MenuItem value={"New"}>New</MenuItem>
+          <MenuItem value={"In-used"}>In-Used</MenuItem>
+          <MenuItem value={"Suspended"}>Suspended</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"

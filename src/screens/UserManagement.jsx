@@ -99,7 +99,22 @@ const UserManagement = () => {
                   <TableCell align="left">
                     <span className="status" style={makeStyle1(user.role)}>{user.role}</span>
                   </TableCell>
-                  <TableCell align="left" className="Details" onClick={() => navigate(`/userManagement/edit/${user.id}`)}>Edit</TableCell>
+                  <TableCell align="left" className="Details" 
+                    onClick={() => 
+                      navigate(`/userManagement/edit/${user.id}`, 
+                        {
+                          state:{
+                            email: user.email,
+                            password: user.password,
+                            name: user.name,
+                            phone: user.phone,
+                            // dob: user.dob,
+                            image: user.image,
+                            role: user.role
+                          }
+                        }
+                      )}
+                    >Edit</TableCell>
                   <TableCell align="left" className="Delete" onClick={() => deleteUser(user.id)}>Delete</TableCell>
                 </TableRow>
               ))) : (

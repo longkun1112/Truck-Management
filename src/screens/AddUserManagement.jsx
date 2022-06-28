@@ -10,6 +10,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const AddUserManagement = () => {
   // const AddUserManagement = ({users, addUser}) => {
@@ -17,8 +20,9 @@ const AddUserManagement = () => {
 
   // const [truckPlate, setTruckPlate] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
+  const [dob, setDob] = useState(new Date());
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [image, setImage] = useState("");
@@ -29,7 +33,7 @@ const AddUserManagement = () => {
     //   user.email === email ? user : null
     // )
 
-    if (!name || !email || !dob || !phone || !role ) {
+    if (!name || !email || !password || !dob || !phone || !role ) {
       return toast.warning("Please fill in all fields!!");
     }
     // if (checkEmailExists.length > 0) {
@@ -47,6 +51,7 @@ const AddUserManagement = () => {
 
     await axios.post('http://localhost:8000/users', {
       name,
+      password,
       email,
       dob,
       phone,
@@ -89,13 +94,22 @@ const AddUserManagement = () => {
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
+        label="Password"
+        variant="outlined"
+        value={password}
+        placeholder={"Password"}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <TextField
+        style={{ width: "600px", margin: "5px" }}
+        type="number"
         label="Phone"
         variant="outlined"
         value={phone}
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
       />
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Date Of Birth"
@@ -103,7 +117,17 @@ const AddUserManagement = () => {
         value={dob}
         placeholder={"Date Of Birth"}
         onChange={(e) => setDob(e.target.value)}
-      />
+      /> */}
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Date Of Birth"
+            value={dob}
+            onChange={(newValue) => {
+              setDob(newValue);
+            }}
+            renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
+          />
+        </LocalizationProvider>
       {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"

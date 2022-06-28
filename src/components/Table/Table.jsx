@@ -91,32 +91,38 @@ const BasicTable =({ contacts, deleteContact }) => {
   }, []);
 
   const add = () => {
-    if(user.role === 'Operator') {
-      navigate('/vehicleInformation/add')
-    } else {
-      toast.error("You don't have permission to add new information")
-    }
+    // if(user.role === 'Admin') {
+    //   navigate('/vehicleInformation/add')
+    // } else {
+    //   toast.error("You don't have permission to add new information")
+    // }
+    navigate('/vehicleInformation/add')
+
   }
 
   const edit = (id) => {
-    if(user.role === 'Admin') {
-      navigate(`/vehicleInformation/edit/${id}`)
-    } else {
-      toast.error("You don't have permission to edit information")
-    }
+    // if(user.role === 'Admin') {
+    //   navigate(`/vehicleInformation/edit/${id}`)
+    // } else {
+    //   toast.error("You don't have permission to edit information")
+    // }
+    navigate(`/vehicleInformation/edit/${id}`)
+
   }
 
   const deleted = (id) => {
-    if(user.role === 'Admin') {
-      deleteContact(id)
-    } else {
-      toast.error("You don't have permission to delete information")
-    }
+    // if(user.role === 'Admin') {
+    //   deleteContact(id)
+    // } else {
+    //   toast.error("You don't have permission to delete information")
+    // }
+    deleteContact(id)
+
   }
   const navigate = useNavigate();
   return (
       <div className="Table">
-      <h3>Recent Orders</h3>
+      <h3>Welcome {user ? user?.name : 'User'}</h3>
         <TableContainer
           component={Paper}
           style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
@@ -150,7 +156,7 @@ const BasicTable =({ contacts, deleteContact }) => {
                   </TableCell>
                   <TableCell align="left">{contact.cargoType}</TableCell>
                   <TableCell align="left">{contact.driver}</TableCell>
-                  <TableCell align="left">{contact.truckType}</TableCell>
+                  <TableCell align="left">{contact.truckType} tons</TableCell>
                   <TableCell align="left">{contact.price}</TableCell>
                   <TableCell align="left">{contact.dimension}</TableCell>
                   <TableCell align="left">{contact.parkingAddress}</TableCell>

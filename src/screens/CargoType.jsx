@@ -82,6 +82,7 @@ const CargoType = () => {
       toast.error("Cargo Type added fail!!");
       console.log('err', err)
     })
+    setType('')
     setOpen(false)
   }
 
@@ -114,7 +115,15 @@ const CargoType = () => {
                   <TableCell component="th" scope="row">
                     {type.type}
                   </TableCell>
-                  <TableCell align="left" className="Details" onClick={() => navigate(`/cargoType/edit/${type.id}`)}>Edit</TableCell>
+                  <TableCell align="left" className="Details" 
+                    onClick={() => 
+                      navigate(`/cargoType/edit/${type.id}`, {
+                        state:{
+                          type: type.type,
+                        }
+                      })
+                    }
+                  >Edit</TableCell>
                   <TableCell align="left" className="Delete" onClick={() => deleteCargo(type.id)}>Delete</TableCell>
                   <TableCell align="left"></TableCell>
                 </TableRow>
