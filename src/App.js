@@ -14,6 +14,7 @@ import AddUserManagement from './screens/AddUserManagement';
 import EditUserManagement from './screens/EditUserManagement';
 import EditCargo from './screens/EditCargo';
 import SignUp from './components/FormLogin/SignUp';
+import Test from './screens/Test';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/userManagement/add" element={<AddUserManagement/>} />
           <Route path="/userManagement/edit/:id" element={<EditUserManagement/>} />
           <Route path="/myAccount" element={<MyAccount/>} />
+          <Route path="/test" element={<Test/>} />
         </Routes>
         {/* <RightSide/> */}
       </div>

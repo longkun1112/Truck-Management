@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import axios from 'axios';
 
 const AddVehicle = ({contacts, addContact}) => {
   const navigate = useNavigate();
@@ -82,12 +83,28 @@ const AddVehicle = ({contacts, addContact}) => {
     },
   };
 
-const names = [
-  'Computer',
-  'Electronics',
-  'Vegetables',
-  'Kid toys',
-];
+const [names, setNames] = useState([
+  // 'Computer',
+  // 'Electronics',
+  // 'Vegetables',
+  // 'Kid toys',
+]);
+
+const getCargoType = async () => {
+  await axios.get('http://localhost:8000/cargoes')
+  .then(function (response) {
+    setNames(response.data)
+    console.log('get', names);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+useEffect(() => {
+  getCargoType();
+  console.log('test', names)
+}, [])
 
   // const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -127,9 +144,9 @@ const names = [
           MenuProps={MenuProps}
         >
           {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={cargoType.indexOf(name) > -1} />
-              <ListItemText primary={name} />
+            <MenuItem key={name.id} value={name.type}>
+              <Checkbox checked={cargoType.indexOf(name.id) > -1} />
+              <ListItemText primary={name.type} />
             </MenuItem>
           ))}
         </Select>

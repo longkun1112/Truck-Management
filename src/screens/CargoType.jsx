@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -14,38 +14,77 @@ import "./Table.css";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { TextField } from '@mui/material';
-import { toast } from 'react-toastify';
+import axios from 'axios';
+import { toast } from "react-toastify";
 
-const CargoType = ({cargoTypes, deleteCargo, addCargo, updateCargo}) => {
+const CargoType = () => {
+  // const CargoType = ({cargoTypes, deleteCargo, addCargo, updateCargo}) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [cargoTypes, setCargoTypes] = useState([]);
+  const [type, setType] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [cargoType, setCargoType] = useState("");
 
-  const handleSubmit = (e) => {
+  const getCargoes = async () => {
+    await axios.get('http://localhost:8000/cargoes')
+    .then(function (response) {
+      setCargoTypes(response.data)
+      console.log(cargoTypes);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getCargoes();
+  }, [])
+
+  const deleteCargo = async (id) => {
+    await axios.delete(`http://localhost:8000/cargoes/${id}`)
+    .then(() => {
+      toast.success("Cargo deleted successfully!!");
+      getCargoes()
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const checkCargoTypeExists = cargoTypes.filter((cargoType) => 
-      cargoType.cargoType === cargoType ? cargoType : null
+    // const checkCargoTypeExists = cargoTypes.filter((cargoType) => 
+    //   cargoType.cargoType === cargoType ? cargoType : null
+    // )
+
+    if (!type) {
+      return toast.warning("Please fill in the fields!!");
+    }
+    // if (checkCargoTypeExists.length > 0) {
+    //   return toast.error("This Cargo Type already exists!!");
+    // }
+
+    // const data = {
+    //   id: cargoTypes.length > 0 ? cargoTypes[cargoTypes.length - 1].id + 1 : 0,
+    //   cargoTypes,
+    // };
+
+    // addCargo(data);
+    await axios.post('http://localhost:8000/cargoes', 
+      {type}
     )
-
-    if (!cargoType) {
-      return toast.warning("Please fill in all fields!!");
-    }
-    if (checkCargoTypeExists.length > 0) {
-      return toast.error("This Cargo Type already exists!!");
-    }
-
-    const data = {
-      id: cargoTypes.length > 0 ? cargoTypes[cargoTypes.length - 1].id + 1 : 0,
-      cargoType,
-    };
-
-    addCargo(data);
-    toast.success("Cargo Type added successfully!!");
-    // navigate("/");
+    .then(() => {
+      toast.success("Cargo Type added successfully!!");
+      getCargoes()
+    })
+    .catch((err) => {
+      toast.error("Cargo Type added fail!!");
+      console.log('err', err)
+    })
     setOpen(false)
   }
+
 
   return (
     <div className="Table">
@@ -66,17 +105,17 @@ const CargoType = ({cargoTypes, deleteCargo, addCargo, updateCargo}) => {
             </TableHead>
             <TableBody style={{ color: "white" }}>
             {cargoTypes.length > 0 ? 
-                (cargoTypes.map((cargoType, id) => (
+                (cargoTypes.map((type, id) => (
                 <TableRow
                   key={id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell align="left">{cargoType.id + 1}</TableCell>
+                  <TableCell align="left">{type.id + 1}</TableCell>
                   <TableCell component="th" scope="row">
-                    {cargoType.cargoType}
+                    {type.type}
                   </TableCell>
-                  <TableCell align="left" className="Details" onClick={() => navigate(`/cargoType/edit/${cargoType.id}`)}>Edit</TableCell>
-                  <TableCell align="left" className="Delete" onClick={() => deleteCargo(cargoType.id)}>Delete</TableCell>
+                  <TableCell align="left" className="Details" onClick={() => navigate(`/cargoType/edit/${type.id}`)}>Edit</TableCell>
+                  <TableCell align="left" className="Delete" onClick={() => deleteCargo(type.id)}>Delete</TableCell>
                   <TableCell align="left"></TableCell>
                 </TableRow>
               ))) : (
@@ -109,9 +148,9 @@ const CargoType = ({cargoTypes, deleteCargo, addCargo, updateCargo}) => {
                   type="text"
                   label="Cargo Type"
                   variant="outlined"
-                  value={cargoType}
+                  value={type}
                   placeholder={"Cargo Type"}
-                  onChange={(e) => setCargoType(e.target.value)}
+                  onChange={(e) => setType(e.target.value)}
                 />
                 <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 30}}>
                   <Button variant="contained" 

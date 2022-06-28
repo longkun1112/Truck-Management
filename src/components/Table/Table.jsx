@@ -91,10 +91,26 @@ const BasicTable =({ contacts, deleteContact }) => {
   }, []);
 
   const add = () => {
-    if(user.role === 'Admin') {
+    if(user.role === 'Operator') {
       navigate('/vehicleInformation/add')
     } else {
       toast.error("You don't have permission to add new information")
+    }
+  }
+
+  const edit = (id) => {
+    if(user.role === 'Admin') {
+      navigate(`/vehicleInformation/edit/${id}`)
+    } else {
+      toast.error("You don't have permission to edit information")
+    }
+  }
+
+  const deleted = (id) => {
+    if(user.role === 'Admin') {
+      deleteContact(id)
+    } else {
+      toast.error("You don't have permission to delete information")
     }
   }
   const navigate = useNavigate();
@@ -142,8 +158,8 @@ const BasicTable =({ contacts, deleteContact }) => {
                   <TableCell align="left">
                     <span className="status" style={makeStyle1(contact.status)}>{contact.status}</span>
                   </TableCell>
-                  <TableCell align="left" className="Details" onClick={() => navigate(`/vehicleInformation/edit/${contact.id}`)}>Edit</TableCell>
-                  <TableCell align="left" className="Delete" onClick={() => deleteContact(contact.id)}>Delete</TableCell>
+                  <TableCell align="left" className="Details" onClick={() => edit(contact.id)}>Edit</TableCell>
+                  <TableCell align="left" className="Delete" onClick={() => deleted(contact.id)}>Delete</TableCell>
                 </TableRow>
               ))) : (
                 <>
