@@ -79,7 +79,7 @@ const UserManagement = () => {
                 <TableCell align="left">Phone</TableCell>
                 <TableCell align="left">Date Of Birth</TableCell>
                 <TableCell align="left">Role Management</TableCell>
-                <TableCell align="left" className="Details" onClick={() => navigate('/userManagement/add')}>Add </TableCell>
+                <TableCell align="left" className="Details" onClick={() => navigate('/userManagement/add')}>Add</TableCell>
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
@@ -108,7 +108,7 @@ const UserManagement = () => {
                             password: user.password,
                             name: user.name,
                             phone: user.phone,
-                            // dob: user.dob,
+                            dob: user.dob,
                             image: user.image,
                             role: user.role
                           }

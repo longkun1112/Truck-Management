@@ -86,6 +86,16 @@ const CargoType = () => {
     setOpen(false)
   }
 
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser) {
+      setUser(currentUser);
+    }
+    console.log("user", user)
+  }, []);
+
 
   return (
     <div className="Table">
@@ -101,7 +111,7 @@ const CargoType = () => {
                 <TableCell align="left">Cargo Type</TableCell>
                 <TableCell align="left"></TableCell>
                 <TableCell align="left"></TableCell>
-                <TableCell align="left" className="Details" onClick={handleOpen}>Add</TableCell>
+                {user && user.role === 'Admin' && <TableCell align="left" className="Details" onClick={handleOpen}>Add</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
@@ -115,7 +125,7 @@ const CargoType = () => {
                   <TableCell component="th" scope="row">
                     {type.type}
                   </TableCell>
-                  <TableCell align="left" className="Details" 
+                  {user && user.role === 'Admin' &&<TableCell align="left" className="Details" 
                     onClick={() => 
                       navigate(`/cargoType/edit/${type.id}`, {
                         state:{
@@ -123,8 +133,8 @@ const CargoType = () => {
                         }
                       })
                     }
-                  >Edit</TableCell>
-                  <TableCell align="left" className="Delete" onClick={() => deleteCargo(type.id)}>Delete</TableCell>
+                  >Edit</TableCell>}
+                  {user && user.role === 'Admin' && <TableCell align="left" className="Delete" onClick={() => deleteCargo(type.id)}>Delete</TableCell>}
                   <TableCell align="left"></TableCell>
                 </TableRow>
               ))) : (

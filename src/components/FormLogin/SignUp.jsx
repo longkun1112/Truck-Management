@@ -63,6 +63,15 @@ export default function SignUp() {
       .then(() => {
         toast.success("User register successfully!!");
         navigate("/");
+        localStorage.setItem('user', JSON.stringify({
+          name,
+          password,
+          email,
+          dob,
+          phone,
+          role: "Operator",
+          image: image
+        }))
       });
   };
 

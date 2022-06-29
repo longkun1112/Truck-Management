@@ -140,7 +140,7 @@ const BasicTable =({ contacts, deleteContact }) => {
                 <TableCell align="left">Parking Address</TableCell>
                 <TableCell align="left">Production<br></br> Year</TableCell>
                 <TableCell align="left">Status</TableCell>
-                <TableCell align="left" className="Details" onClick={() => add()}>Add </TableCell>
+                {user && user.role === 'Admin' && <TableCell align="left" className="Details" onClick={() => add()}>Add </TableCell>}
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
@@ -164,8 +164,8 @@ const BasicTable =({ contacts, deleteContact }) => {
                   <TableCell align="left">
                     <span className="status" style={makeStyle1(contact.status)}>{contact.status}</span>
                   </TableCell>
-                  <TableCell align="left" className="Details" onClick={() => edit(contact.id)}>Edit</TableCell>
-                  <TableCell align="left" className="Delete" onClick={() => deleted(contact.id)}>Delete</TableCell>
+                  {user && user.role === 'Admin' && <TableCell align="left" className="Details" onClick={() => edit(contact.id)}>Edit</TableCell>}
+                  {user && user.role === 'Admin' && <TableCell align="left" className="Delete" onClick={() => deleted(contact.id)}>Delete</TableCell>}
                 </TableRow>
               ))) : (
                 <>

@@ -7,6 +7,10 @@ import axios from 'axios';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const EditUserManagement = (props) => {
   const location = useLocation();
@@ -45,9 +49,12 @@ const EditUserManagement = (props) => {
     })
     .catch(function (error) {
       console.log(error);
-    });
-      
+    });    
   }
+
+  const handleChangeRole = (event) => {
+    setRole(event.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,7 +131,7 @@ const EditUserManagement = (props) => {
       />
       <TextField
         style={{ width: "600px", margin: "5px" }}
-        type="text"
+        type="number"
         label="Phone"
         variant="outlined"
         value={phone || ''}
@@ -150,7 +157,7 @@ const EditUserManagement = (props) => {
             renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
           />
         </LocalizationProvider>
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Role"
@@ -158,7 +165,21 @@ const EditUserManagement = (props) => {
         value={role || ''}
         placeholder={"Role"}
         onChange={(e) => setRole(e.target.value)}
-      />
+      /> */}
+      <FormControl sx={{ m: 1, width: 600 }}>
+                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={role}
+                  label="Role"
+                  onChange={ (event) => 
+                    setRole(event.target.value)}>
+                  <MenuItem value={"Admin"}>Admin</MenuItem>
+                  <MenuItem value={"Operator"}>Operator</MenuItem>
+                  <MenuItem value={"Driver"}>Driver</MenuItem>
+                </Select>
+              </FormControl>
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"

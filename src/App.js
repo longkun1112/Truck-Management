@@ -14,6 +14,8 @@ import AddUserManagement from './screens/AddUserManagement';
 import EditUserManagement from './screens/EditUserManagement';
 import EditCargo from './screens/EditCargo';
 import SignUp from './components/FormLogin/SignUp';
+import NotFound from './screens/NotFound';
+import PrivateRouter from './screens/PrivateRouter';
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
           <Route path="/userManagement/add" element={<AddUserManagement/>} />
           <Route path="/userManagement/edit/:id" element={<EditUserManagement/>} />
           <Route path="/myAccount" element={<MyAccount/>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
         {/* <RightSide/> */}
       </div>
