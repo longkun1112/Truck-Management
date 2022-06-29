@@ -13,6 +13,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Formik } from 'formik';
 
 const AddUserManagement = () => {
   // const AddUserManagement = ({users, addUser}) => {
@@ -69,12 +70,142 @@ const AddUserManagement = () => {
     setRole(event.target.value);
   };
 
+  // const errors = {};
+
+  // if (!email) {
+  //   errors.email = 'Required';
+  // } else if (
+  //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
+  // ) {
+  //   errors.email = 'Invalid email address';
+  // }
+  // return errors;
+
   return (
     <div className="MainDash">
       <h1 style={{marginTop: '80px'}}>Add</h1>
-      <form style={{width: "80%", margin: 'auto'}} onSubmit={handleSubmit}>
+      {/* <Formik
+       initialValues={{ email1: '', password1: '', name: '', phone: '', dob: '', role: '', image: '', }}
+       validate={values => {
+         const errors = {};
+         if (!values.email) {
+           errors.email = 'Required';
+         } else if (
+           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+         ) {
+           errors.email = 'Invalid email address';
+         }
+         return errors;
+       }}
+       onSubmit={(values, { setSubmitting }) => {
+         setTimeout(() => {
+           alert(JSON.stringify(values, null, 2));
+           setSubmitting(false);
+         }, 400);
+       }}
+     >
+       {({
+         values,
+         errors,
+         touched,
+         handleChange,
+         handleBlur,
+         handleSubmit,
+         isSubmitting,
+       }) => (
+          <form style={{width: "100%", margin: 'auto'}} onSubmit={handleSubmit}>
+            <TextField
+              style={{ width: "600px", margin: "5px" }}
+              type="text"
+              label="Name"
+              variant="outlined"
+              placeholder={"Name"}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              style={{ width: "600px", margin: "5px" }}
+              type="text"
+              label="Email"
+              variant="outlined"
+              placeholder={"Email"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              // onChange={handleChange}
+              onBlur={handleBlur}
+              // value={values.email1}
+            />
+            {errors.email1 && touched.email1 && errors.email1}
+            <TextField
+              style={{ width: "600px", margin: "5px" }}
+              type="text"
+              label="Password"
+              variant="outlined"
+              placeholder={"Password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              // onChange={handleChange}
+              onBlur={handleBlur}
+              // value={values.password1}
+            />
+            {errors.password1 && touched.password1 && errors.password1}
+            <TextField
+              style={{ width: "600px", margin: "5px" }}
+              type="number"
+              label="Phone"
+              variant="outlined"
+              value={phone}
+              placeholder={"Phone"}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Date Of Birth"
+                  value={dob}
+                  onChange={(newValue) => {
+                    setDob(newValue);
+                  }}
+                  renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
+                />
+              </LocalizationProvider>
+              <FormControl sx={{ m: 1, width: 600 }}>
+                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={role}
+                  label="Role"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={"Admin"}>Admin</MenuItem>
+                  <MenuItem value={"Operator"}>Operator</MenuItem>
+                  <MenuItem value={"Driver"}>Driver</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                style={{ width: "600px", margin: "5px" }}
+                type="text"
+                label="Image"
+                variant="outlined"
+                value={image}
+                placeholder={"Image"}
+                onChange={(e) => setImage(e.target.value)}
+              />
+              <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
+              <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 0}}>
+              <Button variant="contained" 
+                type='submit'
+                color="success"
+                style={{width: '180px', height: '50px', fontSize: "18px"}}
+              >Add</Button>
+              </div>
+          </form>
+        )}
+      </Formik> */}
+
+      <form style={{width: "100%", margin: 'auto'}} onSubmit={handleSubmit}>
       <TextField
-        style={{ width: "600px", margin: "5px" }}
+        style={{ width: "600px",marginTop: '0px' , margin: "5px" }}
         type="text"
         label="Name"
         variant="outlined"
@@ -83,7 +214,7 @@ const AddUserManagement = () => {
         onChange={(e) => setName(e.target.value)}
       />
       <TextField
-        style={{ width: "600px", margin: "5px" }}
+        style={{ width: "600px",marginTop: '0px' , margin: "5px" }}
         type="text"
         label="Email"
         variant="outlined"
@@ -92,7 +223,7 @@ const AddUserManagement = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
       <TextField
-        style={{ width: "600px", margin: "5px" }}
+        style={{ width: "600px",marginTop: '50px' , margin: "5px" }}
         type="text"
         label="Password"
         variant="outlined"
@@ -101,7 +232,7 @@ const AddUserManagement = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <TextField
-        style={{ width: "600px", margin: "5px" }}
+        style={{ width: "600px", marginTop: '50px' , margin: "5px" }}
         type="number"
         label="Phone"
         variant="outlined"
@@ -109,15 +240,6 @@ const AddUserManagement = () => {
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
       />
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Date Of Birth"
-        variant="outlined"
-        value={dob}
-        placeholder={"Date Of Birth"}
-        onChange={(e) => setDob(e.target.value)}
-      /> */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="Date Of Birth"
@@ -125,19 +247,19 @@ const AddUserManagement = () => {
             onChange={(newValue) => {
               setDob(newValue);
             }}
-            renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
+            renderInput={(params) => <TextField style={{ width: "600px", marginTop: '50px' , margin: "5px" }} {...params} />}
           />
         </LocalizationProvider>
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Role"
-        variant="outlined"
-        value={role}
-        placeholder={"Role"}
-        onChange={(e) => setRole(e.target.value)}
-      /> */}
-        <FormControl sx={{ m: 1, width: 600 }}>
+        <TextField
+          style={{ width: "600px", marginTop: '50px' , margin: "5px" }}
+          type="text"
+          label="Image"
+          variant="outlined"
+          value={image}
+          placeholder={"Image"}
+          onChange={(e) => setImage(e.target.value)}
+        />
+        <FormControl sx={{ m: 1, width: 600, marginTop: 7 }}>
           <InputLabel id="demo-simple-select-label">Role</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -151,19 +273,10 @@ const AddUserManagement = () => {
             <MenuItem value={"Driver"}>Driver</MenuItem>
           </Select>
         </FormControl>
-      <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Image"
-        variant="outlined"
-        value={image}
-        placeholder={"Image"}
-        onChange={(e) => setImage(e.target.value)}
-      />
+      
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>
         <Button variant="contained" 
-          // onClick={() => handleSubmit()}
           type='submit'
           color="success"
           style={{width: '180px', height: '50px', fontSize: "18px"}}

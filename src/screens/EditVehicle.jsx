@@ -176,12 +176,12 @@ const EditVehicle = ({ contacts, updateContact }) => {
           onChange={(e) => setDriver(e.target.value)}
       /> */}
       <FormControl sx={{ m: 1, width: 600 }}>
-        <InputLabel id="demo-simple-select-label">Driver</InputLabel>
+        <InputLabel id="demo-simple-select-label">Operator</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={driver}
-          label="Driver"
+          label="Operator"
           onChange={handleChangeDriver}
         >
           <MenuItem value={""}></MenuItem>
