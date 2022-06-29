@@ -133,7 +133,7 @@ const BasicTable =({ contacts, deleteContact }) => {
                 <TableCell align="left">Id</TableCell>
                 <TableCell align="left">Truck plate</TableCell>
                 <TableCell align="left">Cargo Type</TableCell>
-                <TableCell align="left">Driver</TableCell>
+                <TableCell align="left">Operator</TableCell>
                 <TableCell align="left">Truck Type</TableCell>
                 <TableCell align="left">Price</TableCell>
                 <TableCell align="left">Dimension<br></br>(L-W-H)</TableCell>

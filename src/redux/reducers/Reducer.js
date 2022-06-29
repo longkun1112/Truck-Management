@@ -1,13 +1,7 @@
   const initialState = [
-    { id: 0, truckPlate: "30A-50493", cargoType: "Computer, Electronics", driver: "Nguyễn Văn A", truckType: '5', price: '1000000000', dimension: '10-2-1.5', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2010', status: 'In-used' },
-    { id: 1, truckPlate: "30A-12345", cargoType: "Vegetables", driver: "Nguyễn Văn B", truckType: '10', price: '1500000000', dimension: '9.8-1.8-1.8', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2011', status: 'New' },
-    { id: 2, truckPlate: "30A-50496", cargoType: "Kid toys, Computer", driver: "Nguyễn Văn C", truckType: '20', price: '2000000000', dimension: '10-2-2', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2012', status: 'Suspended'},
-  ];
-  
-  const initialState1 = [
-    { id: 0, truckPlate: "30A-50493", cargoType: "Computer, Electronics", drive: "Nguyễn Văn A", truckType: '5 tons', price: '1000000000', dimension: '10-2-1.5', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2010', status: 'In-used'},
-    { id: 1, truckPlate: "30A-12345", cargoType: "Vegetables", drive: "Nguyễn Văn B", truckType: '10 tons', price: '1500000000', dimension: '9.8-1.8-1.8', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2011', status: 'New'},
-    { id: 2, truckPlate: "30A-50493", cargoType: "Kid toys, Computer", drive: "Nguyễn Văn C", truckType: '20 tons', price: '2000000000', dimension: '10-2-2', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2012', status: 'Suspended'},
+    { id: 0, truckPlate: "30A-50493", cargoType: "Computer, Electronics", driver: "Lisa", truckType: '5', price: '1000000000', dimension: '10-2-1.5', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2010', status: 'In-used' },
+    { id: 1, truckPlate: "30A-12345", cargoType: "Vegetables", driver: "Invoker", truckType: '10', price: '1500000000', dimension: '9.8-1.8-1.8', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2011', status: 'New' },
+    { id: 2, truckPlate: "30A-50496", cargoType: "Kid toys, Computer", driver: "Lina", truckType: '20', price: '2000000000', dimension: '10-2-2', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2012', status: 'Suspended'},
   ];
   
   export const Reducer = (state = initialState, action) => {
