@@ -30,10 +30,6 @@ const AddUserManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const checkEmailExists = users.filter((user) => 
-    //   user.email === email ? user : null
-    // )
-
     if (!name || !email || !password || !dob || !phone || !role ) {
       return toast.warning("Please fill in all fields!!");
     }
@@ -66,44 +62,60 @@ const AddUserManagement = () => {
     // addUser(data);
   }
 
-  const handleChange = (event) => {
+  const handleChangeRole = (event) => {
     setRole(event.target.value);
   };
-
-  // const errors = {};
-
-  // if (!email) {
-  //   errors.email = 'Required';
-  // } else if (
-  //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
-  // ) {
-  //   errors.email = 'Invalid email address';
-  // }
-  // return errors;
 
   return (
     <div className="MainDash">
       <h1 style={{marginTop: '80px'}}>Add</h1>
-      {/* <Formik
-       initialValues={{ email1: '', password1: '', name: '', phone: '', dob: '', role: '', image: '', }}
+      <Formik
+       initialValues={{ email: '', password: '', name: '', phone: '', dob: '', role: '', image: '' }}
        validate={values => {
          const errors = {};
          if (!values.email) {
-           errors.email = 'Required';
+           errors.email = 'Email is required';
          } else if (
            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
          ) {
            errors.email = 'Invalid email address';
          }
+         if (!values.password) {
+          errors.password = 'Password is required';
+         }
+         if (!values.phone) {
+          errors.phone = 'Phone is required';
+         }
+         if (!values.name) {
+          errors.name = 'Name is required';
+         }
+         if (!values.image) {
+          errors.image = 'Image is required';
+         }
          return errors;
        }}
-       onSubmit={(values, { setSubmitting }) => {
-         setTimeout(() => {
-           alert(JSON.stringify(values, null, 2));
-           setSubmitting(false);
-         }, 400);
-       }}
-     >
+       onSubmit={async (values, { setSubmitting }) => {
+        const {name, password, email, dob, phone, image} = values;
+        //  setTimeout(() => {
+        //    alert(JSON.stringify(values, null, 2));
+        //    setSubmitting(false);
+        //  }, 400);
+        await axios.post('http://localhost:8000/users', {
+            name: name,
+            password: password,
+            email: email,
+            // dob: new Date(),
+            dob: dob,
+            phone: phone,
+            role: role,
+            image: image
+          })
+          .then(() => {
+            toast.success("User added successfully!!");
+            navigate("/userManagement");
+          });
+        }}
+      >
        {({
          values,
          errors,
@@ -118,54 +130,71 @@ const AddUserManagement = () => {
               style={{ width: "600px", margin: "5px" }}
               type="text"
               label="Name"
+              name='name'
               variant="outlined"
               placeholder={"Name"}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={values.name}
+              // onChange={(e) => setName(e.target.value)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.name && touched.name && errors.name}
+              helperText={errors.name && touched.name && errors.name}
             />
             <TextField
               style={{ width: "600px", margin: "5px" }}
               type="text"
               label="Email"
+              name='email'
               variant="outlined"
               placeholder={"Email"}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              // onChange={handleChange}
+              // value={email}
+              // onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
               onBlur={handleBlur}
-              // value={values.email1}
+              value={values.email}
+              error={errors.email && touched.email && errors.email}
+              helperText={errors.email && touched.email && errors.email}
             />
-            {errors.email1 && touched.email1 && errors.email1}
             <TextField
               style={{ width: "600px", margin: "5px" }}
               type="text"
+              name='password'
               label="Password"
               variant="outlined"
               placeholder={"Password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              // onChange={handleChange}
+              // value={password}
+              // onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
               onBlur={handleBlur}
-              // value={values.password1}
+              value={values.password}
+              error={errors.password && touched.password && errors.password}
+              helperText={errors.password && touched.password && errors.password}
             />
-            {errors.password1 && touched.password1 && errors.password1}
             <TextField
               style={{ width: "600px", margin: "5px" }}
               type="number"
               label="Phone"
               variant="outlined"
-              value={phone}
+              name='phone'
+              value={values.phone}
               placeholder={"Phone"}
-              onChange={(e) => setPhone(e.target.value)}
+              // onChange={(e) => setPhone(e.target.value)}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.phone && touched.phone && errors.phone}
+              helperText={errors.phone && touched.phone && errors.phone}
             />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Date Of Birth"
-                  value={dob}
+                  // value={dob}
+                  value={values.dob}
                   onChange={(newValue) => {
-                    setDob(newValue);
+                    values.dob = newValue;
                   }}
-                  renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
+                  onBlur={handleBlur}
+                  renderInput={(params) => <TextField 
+                    style={{ width: "600px", margin: "5px" }} {...params} />}
                 />
               </LocalizationProvider>
               <FormControl sx={{ m: 1, width: 600 }}>
@@ -175,8 +204,7 @@ const AddUserManagement = () => {
                   id="demo-simple-select"
                   value={role}
                   label="Role"
-                  onChange={handleChange}
-                >
+                  onChange={handleChangeRole}>
                   <MenuItem value={"Admin"}>Admin</MenuItem>
                   <MenuItem value={"Operator"}>Operator</MenuItem>
                   <MenuItem value={"Driver"}>Driver</MenuItem>
@@ -187,9 +215,14 @@ const AddUserManagement = () => {
                 type="text"
                 label="Image"
                 variant="outlined"
-                value={image}
+                name='image'
+                value={values.image}
                 placeholder={"Image"}
-                onChange={(e) => setImage(e.target.value)}
+                // onChange={(e) => setImage(e.target.value)}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.image && touched.image && errors.image}
+                helperText={errors.image && touched.image && errors.image}
               />
               <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
               <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 0}}>
@@ -201,26 +234,29 @@ const AddUserManagement = () => {
               </div>
           </form>
         )}
-      </Formik> */}
+      </Formik>
 
-      <form style={{width: "100%", margin: 'auto'}} onSubmit={handleSubmit}>
+      {/* <form style={{width: "100%", margin: 'auto'}} onSubmit={handleSubmit}>
       <TextField
         style={{ width: "600px",marginTop: '0px' , margin: "5px" }}
         type="text"
         label="Name"
         variant="outlined"
         value={name}
-        placeholder={"Name"}
         onChange={(e) => setName(e.target.value)}
+        error={isNameValid}
+        helperText={isNameValid && "Name is required."}
       />
       <TextField
         style={{ width: "600px",marginTop: '0px' , margin: "5px" }}
-        type="text"
+        type="email"
         label="Email"
         variant="outlined"
         value={email}
         placeholder={"Email"}
         onChange={(e) => setEmail(e.target.value)}
+        error={isEmailValid}
+        helperText={isEmailValid && "Email is required."}
       />
       <TextField
         style={{ width: "600px",marginTop: '50px' , margin: "5px" }}
@@ -230,6 +266,8 @@ const AddUserManagement = () => {
         value={password}
         placeholder={"Password"}
         onChange={(e) => setPassword(e.target.value)}
+        error={isPassword}
+        helperText={isPassword && "Password is required."}
       />
       <TextField
         style={{ width: "600px", marginTop: '50px' , margin: "5px" }}
@@ -239,6 +277,8 @@ const AddUserManagement = () => {
         value={phone}
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
+        error={isPhone}
+        helperText={isPhone && "Phone is required."}
       />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
@@ -247,7 +287,10 @@ const AddUserManagement = () => {
             onChange={(newValue) => {
               setDob(newValue);
             }}
-            renderInput={(params) => <TextField style={{ width: "600px", marginTop: '50px' , margin: "5px" }} {...params} />}
+            renderInput={(params) => <TextField
+              error={isDob}
+              helperText={isDob && "Date Of Birth is required."}
+              style={{ width: "600px", marginTop: '50px' , margin: "5px" }} {...params} />}
           />
         </LocalizationProvider>
         <TextField
@@ -258,6 +301,8 @@ const AddUserManagement = () => {
           value={image}
           placeholder={"Image"}
           onChange={(e) => setImage(e.target.value)}
+          error={isImage}
+          helperText={isImage && "Image is required."}
         />
         <FormControl sx={{ m: 1, width: 600, marginTop: 7 }}>
           <InputLabel id="demo-simple-select-label">Role</InputLabel>
@@ -267,6 +312,8 @@ const AddUserManagement = () => {
             value={role}
             label="Role"
             onChange={handleChange}
+            error={isRole}
+            helperText={isRole && "Role is required."}
           >
             <MenuItem value={"Admin"}>Admin</MenuItem>
             <MenuItem value={"Operator"}>Operator</MenuItem>
@@ -276,13 +323,13 @@ const AddUserManagement = () => {
       
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>
-        <Button variant="contained" 
+        <Button variant="contained"
           type='submit'
           color="success"
           style={{width: '180px', height: '50px', fontSize: "18px"}}
         >Add</Button>
         </div>
-      </form>
+      </form> */}
     </div>
   )
 }
