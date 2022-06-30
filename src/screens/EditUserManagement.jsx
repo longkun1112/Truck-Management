@@ -14,7 +14,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const EditUserManagement = (props) => {
   const location = useLocation();
-  // const EditUserManagement = ({users, updateUser}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState();
@@ -30,11 +29,6 @@ const EditUserManagement = (props) => {
   const [image, setImage] = useState(location.state.image);
 
   useEffect(() => {
-    // setName( user?.name);
-    // setEmail( user?.email);
-    // setDob( user?.dob);
-    // setPhone( user?.phone);
-    // setRole( user?.role);
     getUserById(id);
     console.log('test', user?.name)
     console.log('id', id)
@@ -78,7 +72,6 @@ const EditUserManagement = (props) => {
       role,
     };
 
-    // updateUser(data);
     await axios.put(`http://localhost:8000/users/${id}`, {
       name,
       email,
@@ -91,10 +84,8 @@ const EditUserManagement = (props) => {
     .then(() => {
       toast.success("Users edited successfully!!");
       navigate("/userManagement");
-      // getUsers()
     });
-    // toast.success("User edited successfully!!");
-    // navigate("/userManagement");
+    
   }
 
   return (
@@ -138,15 +129,6 @@ const EditUserManagement = (props) => {
         placeholder={"Phone"}
         onChange={(e) => setPhone(e.target.value)}
       />
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Date Of Birth"
-        variant="outlined"
-        value={dob || ''}
-        placeholder={"Date Of Birth"}
-        onChange={(e) => setDob(e.target.value)}
-      /> */}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="Date Of Birth"
@@ -157,15 +139,6 @@ const EditUserManagement = (props) => {
             renderInput={(params) => <TextField style={{ width: "600px", margin: "5px" }} {...params} />}
           />
         </LocalizationProvider>
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Role"
-        variant="outlined"
-        value={role || ''}
-        placeholder={"Role"}
-        onChange={(e) => setRole(e.target.value)}
-      /> */}
       <FormControl sx={{ m: 1, width: 600 }}>
                 <InputLabel id="demo-simple-select-label">Role</InputLabel>
                 <Select
@@ -192,7 +165,6 @@ const EditUserManagement = (props) => {
       <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/userManagement")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>
         <Button variant="contained" 
-          // onClick={() => handleSubmit()}
           type='submit'
           color="success"
           style={{width: '180px', height: '50px', fontSize: "18px"}}

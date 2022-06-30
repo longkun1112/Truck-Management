@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import axios from 'axios';
 
 const EditCargo = () => {
-  // const EditCargo = ({cargoTypes, updateCargo}) => {
   const location = useLocation();
   const { id } = useParams();
   const [cargoType, setCargoType] = useState(location.state.type);
@@ -58,11 +57,8 @@ const EditCargo = () => {
           > */}
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Text in a modal
+                Edit Cargo
               </Typography>
-              {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography> */}
               <form onSubmit={handleSubmit}>
                 <TextField
                   style={{ width: "400px", marginTop: '30px' }}
@@ -74,8 +70,12 @@ const EditCargo = () => {
                   onChange={(e) => setCargoType(e.target.value)}
                 />
                 <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 30}}>
+                    <Button variant="contained" 
+                        onClick={() => navigate('/cargoType')}
+                        color="primary"
+                        style={{width: '180px', height: '50px', fontSize: "18px"}}
+                      >Cancel</Button>
                   <Button variant="contained" 
-                    // onClick={() => handleSubmit()}
                     type='submit'
                     color="success"
                     style={{width: '180px', height: '50px', fontSize: "18px"}}

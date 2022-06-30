@@ -36,7 +36,6 @@ const makeStyle1=(role)=>{
 }
 
 const UserManagement = () => {
-  // const UserManagement = ({ users, deleteUser }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([])
   const getUsers = async () => {
@@ -63,6 +62,16 @@ const UserManagement = () => {
     });
   }
 
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (currentUser) {
+      setUser(currentUser);
+    }
+    console.log("user", user)
+  }, []);
+
   return (
     <div className="Table">
       <h1 style={{textAlign: 'center', marginTop: "80px"}}>User Management</h1>
@@ -79,7 +88,7 @@ const UserManagement = () => {
                 <TableCell align="left">Phone</TableCell>
                 <TableCell align="left">Date Of Birth</TableCell>
                 <TableCell align="left">Role Management</TableCell>
-                <TableCell align="left" className="Details" onClick={() => navigate('/userManagement/add')}>Add</TableCell>
+                {user && user.role === 'Admin' && <TableCell align="left" className="Details" onClick={() => navigate('/userManagement/add')}>Add</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>

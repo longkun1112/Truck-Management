@@ -18,7 +18,6 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 
 const CargoType = () => {
-  // const CargoType = ({cargoTypes, deleteCargo, addCargo, updateCargo}) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [cargoTypes, setCargoTypes] = useState([]);
@@ -156,11 +155,8 @@ const CargoType = () => {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Text in a modal
+                Add Cargo
               </Typography>
-              {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography> */}
               <form onSubmit={handleSubmit}>
                 <TextField
                   style={{ width: "400px", marginTop: '30px' }}
@@ -173,7 +169,11 @@ const CargoType = () => {
                 />
                 <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 30}}>
                   <Button variant="contained" 
-                    // onClick={() => handleSubmit()}
+                      onClick={() => setOpen(false)}
+                      color="primary"
+                      style={{width: '180px', height: '50px', fontSize: "18px"}}
+                    >Cancel</Button>
+                  <Button variant="contained" 
                     type='submit'
                     color="success"
                     style={{width: '180px', height: '50px', fontSize: "18px"}}
