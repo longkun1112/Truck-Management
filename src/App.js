@@ -16,17 +16,23 @@ import EditCargo from './screens/EditCargo';
 import SignUp from './components/FormLogin/SignUp';
 import NotFound from './screens/NotFound';
 import PrivateRouter from './screens/PrivateRouter';
+import React, {Fragment} from 'react';
 
 function App() {
   return (
     <div className="App">
       <ToastContainer />
       <div className="AppGlass">
+      <Fragment>
         <Sidebar/>
         <Routes>
           <Route path="/login" element={<SignInSide/>} />
           <Route path="/SignUp" element={<SignUp/>} />
-          <Route exact path="/" element={<MainDash/>} />
+          {/* <Route exact path="/" element={<MainDash/>} /> */}
+          {/* <Route path="/" element={<PrivateRouter Component={MainDash} />}/> */}
+          <Route exact path='/' element={<PrivateRouter/>}>
+            <Route exact path='/' element={<MainDash/>}/>
+          </Route>
           <Route path="/vehicleInformation" element={<MainDash/>} />
           <Route path="/vehicleInformation/add" element={<AddVehicle/>} />
           <Route path="/vehicleInformation/edit/:id" element={<EditVehicle/>} />
@@ -38,6 +44,7 @@ function App() {
           <Route path="/myAccount" element={<MyAccount/>} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
+        </Fragment>
         {/* <RightSide/> */}
       </div>
     </div>

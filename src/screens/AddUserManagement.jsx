@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './style.css';
 import axios from 'axios';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -16,10 +15,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Formik } from 'formik';
 
 const AddUserManagement = () => {
-  // const AddUserManagement = ({users, addUser}) => {
   const navigate = useNavigate();
 
-  // const [truckPlate, setTruckPlate] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -38,7 +35,6 @@ const AddUserManagement = () => {
     // }
 
     const data = {
-      // id: users.length > 0 ? users[users.length - 1].id + 1 : 0,
       name,
       email,
       dob,
@@ -59,7 +55,6 @@ const AddUserManagement = () => {
       toast.success("User added successfully!!");
       navigate("/userManagement");
     });
-    // addUser(data);
   }
 
   const handleChangeRole = (event) => {
@@ -96,15 +91,10 @@ const AddUserManagement = () => {
        }}
        onSubmit={async (values, { setSubmitting }) => {
         const {name, password, email, dob, phone, image} = values;
-        //  setTimeout(() => {
-        //    alert(JSON.stringify(values, null, 2));
-        //    setSubmitting(false);
-        //  }, 400);
         await axios.post('http://localhost:8000/users', {
             name: name,
             password: password,
             email: email,
-            // dob: new Date(),
             dob: dob,
             phone: phone,
             role: role,
@@ -134,7 +124,6 @@ const AddUserManagement = () => {
               variant="outlined"
               placeholder={"Name"}
               value={values.name}
-              // onChange={(e) => setName(e.target.value)}
               onChange={handleChange}
               onBlur={handleBlur}
               error={errors.name && touched.name && errors.name}
@@ -147,8 +136,6 @@ const AddUserManagement = () => {
               name='email'
               variant="outlined"
               placeholder={"Email"}
-              // value={email}
-              // onChange={(e) => setEmail(e.target.value)}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.email}
@@ -162,8 +149,6 @@ const AddUserManagement = () => {
               label="Password"
               variant="outlined"
               placeholder={"Password"}
-              // value={password}
-              // onChange={(e) => setPassword(e.target.value)}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.password}
@@ -178,7 +163,6 @@ const AddUserManagement = () => {
               name='phone'
               value={values.phone}
               placeholder={"Phone"}
-              // onChange={(e) => setPhone(e.target.value)}
               onChange={handleChange}
               onBlur={handleBlur}
               error={errors.phone && touched.phone && errors.phone}
@@ -187,7 +171,6 @@ const AddUserManagement = () => {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Date Of Birth"
-                  // value={dob}
                   value={values.dob}
                   onChange={(newValue) => {
                     values.dob = newValue;
@@ -218,7 +201,6 @@ const AddUserManagement = () => {
                 name='image'
                 value={values.image}
                 placeholder={"Image"}
-                // onChange={(e) => setImage(e.target.value)}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={errors.image && touched.image && errors.image}

@@ -119,7 +119,6 @@ const EditVehicle = ({ contacts, updateContact }) => {
       target: { value },
     } = event;
     setPersonName(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -166,15 +165,6 @@ const EditVehicle = ({ contacts, updateContact }) => {
           ))}
         </Select>
       </FormControl> */}
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Driver"
-        variant="outlined"
-        value={driver}
-          placeholder={"Driver"}
-          onChange={(e) => setDriver(e.target.value)}
-      /> */}
       <FormControl sx={{ m: 1, width: 600 }}>
         <InputLabel id="demo-simple-select-label">Operator</InputLabel>
         <Select
@@ -208,7 +198,7 @@ const EditVehicle = ({ contacts, updateContact }) => {
         placeholder="Price"
         onChange={(e) => setPrice(e.target.value)}
       />
-      <TextField
+      {/* <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
         label="Dimension (L-W-H)"
@@ -216,7 +206,8 @@ const EditVehicle = ({ contacts, updateContact }) => {
         placeholder="Dimension (L-W-H)"
         value={dimension}
         onChange={(e) => setDimension(e.target.value)}
-      />
+      /> */}
+      
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
@@ -235,15 +226,6 @@ const EditVehicle = ({ contacts, updateContact }) => {
         value={productionYear}
         onChange={(e) => setProductionYear(e.target.value)}
       />
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Status"
-        variant="outlined"
-        placeholder="Status"
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      /> */}
       <FormControl sx={{ m: 1, width: 600 }}>
         <InputLabel id="demo-simple-select-label">Status</InputLabel>
         <Select
@@ -271,7 +253,6 @@ const EditVehicle = ({ contacts, updateContact }) => {
         <Button style={{position: 'absolute', top: "90px", right: "150px"}} variant="contained" onClick={() => navigate("/")}>Go back</Button>
         <div style={{justifyContent: 'space-around', display: 'flex', marginTop: 70}}>
         <Button variant="contained" 
-          // onClick={() => handleSubmit()}
           type='submit'
           color="success"
           style={{width: '180px', height: '50px', fontSize: "18px"}}

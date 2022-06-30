@@ -12,6 +12,30 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 import { Formik } from 'formik';
+import Input from '@mui/material/Input';
+import PropTypes from 'prop-types';
+import { IMaskInput } from 'react-imask';
+
+const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
+  const { onChange, ...other } = props;
+  return (
+    <IMaskInput
+      {...other}
+      mask=" 00-00-00"
+      definitions={{
+        '#': /[1-9]/,
+      }}
+      inputRef={ref}
+      onAccept={(value) => onChange({ target: { name: props.name, value } })}
+      overwrite
+    />
+  );
+});
+
+TextMaskCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 const AddVehicle = ({contacts, addContact}) => {
   const navigate = useNavigate();
@@ -141,6 +165,18 @@ useEffect(() => {
     );
   };
 
+  const [values1, setValues1] = React.useState({
+    dimension: '00-00-00',
+    numberformat: '1320',
+  });
+
+  const handleChange1 = (event) => {
+    setValues1({
+      ...values1,
+      [event.target.name]: event.target.value,
+    });
+  };
+
   return (
     <div className="MainDash">
       <h1>Add</h1>
@@ -178,10 +214,6 @@ useEffect(() => {
          return errors;
        }}
        onSubmit={(values, { setSubmitting }) => {
-        //  setTimeout(() => {
-        //    alert(JSON.stringify(values, null, 2));
-        //    setSubmitting(false);
-        //  }, 400);
         const {truckPlate, truckType, dimension, price, parkingAddress, productionYear, description} = values;
         const checkTruckPlateExists = contacts.filter((contact) => 
           contact.truckPlate === truckPlate ? contact : null
@@ -223,7 +255,6 @@ useEffect(() => {
             label="Truck Plate"
             variant="outlined"
             placeholder={"Truck Plate"}
-            // onChange={(e) => setTruckPlate(e.target.value)}
             name='truckPlate'
             value={values.truckPlate}
             onChange={handleChange}
@@ -271,8 +302,6 @@ useEffect(() => {
             label="Truck Type"
             variant="outlined"
             placeholder="Truck Type"
-            // value={truckType}
-            // onChange={(e) => setTruckType(e.target.value)}
             name='truckType'
             value={values.truckType}
             onChange={handleChange}
@@ -286,8 +315,6 @@ useEffect(() => {
             label="Price"
             variant="outlined"
             placeholder="Price"
-            // value={price}
-            // onChange={(e) => setPrice(e.target.value)}
             name='price'
             value={values.price}
             onChange={handleChange}
@@ -295,29 +322,44 @@ useEffect(() => {
             error={errors.price && touched.price && errors.price}
             helperText={errors.price && touched.price && errors.price}
           />
-          <TextField
+          {/* <TextField
             style={{ width: "600px", margin: "5px" }}
             type="text"
             label="Dimension (L-W-H)"
             variant="outlined"
             placeholder="Dimension (L-W-H)"
-            // value={dimension}
-            // onChange={(e) => setDimension(e.target.value)}
-            name='dimension'
+            // value={values.dimension}
+            // onChange={handleChange}
             value={values.dimension}
             onChange={handleChange}
+            name="dimension"
+            id="formatted-text-mask-input"
+            inputComponent={TextMaskCustom}
             onBlur={handleBlur}
             error={errors.dimension && touched.dimension && errors.dimension}
             helperText={errors.dimension && touched.dimension && errors.dimension}
-          />
+          /> */}
+          <FormControl variant="standard">
+            <Input
+              style={{ width: "600px", margin: "5px", height: "55px" }}
+              label="Dimension (L-W-H)"
+              variant="outlined"
+              placeholder="Dimension (L-W-H)"
+              value={values.dimension}
+              onChange={handleChange}
+              name="dimension"
+              id="formatted-text-mask-input"
+              inputComponent={TextMaskCustom}
+              error={errors.dimension && touched.dimension && errors.dimension}
+              helperText={errors.dimension && touched.dimension && errors.dimension}
+            />
+          </FormControl>
           <TextField
             style={{ width: "600px", margin: "5px" }}
             type="text"
             label="Parking Address"
             variant="outlined"
             placeholder="Parking Address"
-            // value={parkingAddress}
-            // onChange={(e) => setParkingAddress(e.target.value)}
             name='parkingAddress'
             value={values.parkingAddress}
             onChange={handleChange}
@@ -331,8 +373,6 @@ useEffect(() => {
             label="Production Year"
             variant="outlined"
             placeholder="Production Year"
-            // value={productionYear}
-            // onChange={(e) => setProductionYear(e.target.value)}
             name='productionYear'
             value={values.productionYear}
             onChange={handleChange}
