@@ -8,52 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./Table.css";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
-function createData(name, trackingId, date, status) {
-  return { name, trackingId, date, status };
-}
-
-const rows = [
-  createData("Lasania Chiken Fri", 18908424, "2 March 2022", "Approved"),
-  createData("Big Baza Bang ", 18908424, "2 March 2022", "Pending"),
-  createData("Mouth Freshner", 18908424, "2 March 2022", "Approved"),
-  createData("Cupcake", 18908421, "2 March 2022", "Delivered"),
-];
-
-const makeStyle=(status)=>{
-  if(status === 'Approved')
-  {
-    return {
-      background: 'rgb(145 254 159 / 47%)',
-      color: 'green',
-    }
-  }
-  else if(status === 'Pending')
-  {
-    return{
-      background: '#ffadad8f',
-      color: 'red',
-    }
-  }
-  else{
-    return{
-      background: '#59bfff',
-      color: 'white',
-    }
-  }
-}
-
-function createData1(id, truckPlate, cargoType, driver, truckType, price, dimension, parkingAddress, productionYear, status) {
-  return { id, truckPlate, cargoType, driver, truckType, price, dimension, parkingAddress, productionYear, status };
-}
-
-const rows1 = [
-  { id: 0, truckPlate: "30A-50493", cargoType: "Computer, Electronics", drive: "Nguyễn Văn A", truckType: '5 tons', price: '1000000000', dimension: '10-2-1.5', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2010', status: 'In-used'},
-  { id: 1, truckPlate: "30A-12345", cargoType: "Vegetables", drive: "Nguyễn Văn B", truckType: '10 tons', price: '1500000000', dimension: '9.8-1.8-1.8', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2011', status: 'New'},
-  { id: 2, truckPlate: "30A-50493", cargoType: "Kid toys, Compute", drive: "Nguyễn Văn C", truckType: '20 tons', price: '2000000000', dimension: '10-2-2', parkingAddress: 'No.128 Hoàn Kiếm, HN', productionYear: '2012', status: 'Suspended'},
-];
+import { deleteInfoAction } from '../../redux/saga/actions/InfoAction';
 
 const makeStyle1=(status)=>{
   if(status === 'New')
@@ -78,8 +35,7 @@ const makeStyle1=(status)=>{
   }
 }
 
-
-const BasicTable =({ contacts, deleteContact }) => {
+const BasicTable =({ deleteinfo }) => {
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -91,34 +47,25 @@ const BasicTable =({ contacts, deleteContact }) => {
   }, []);
 
   const add = () => {
-    // if(user.role === 'Admin') {
-    //   navigate('/vehicleInformation/add')
-    // } else {
-    //   toast.error("You don't have permission to add new information")
-    // }
     navigate('/vehicleInformation/add')
 
   }
 
-  const edit = (id) => {
-    // if(user.role === 'Admin') {
-    //   navigate(`/vehicleInformation/edit/${id}`)
-    // } else {
-    //   toast.error("You don't have permission to edit information")
-    // }
-    navigate(`/vehicleInformation/edit/${id}`)
-
+  const deleted = async (id) => {
+    await deleteinfo(id)
+    toast.success("Info deleted successfully!!");
+    dispatch({type: "GET_ALL_INFO"})
   }
 
-  const deleted = (id) => {
-    // if(user.role === 'Admin') {
-    //   deleteContact(id)
-    // } else {
-    //   toast.error("You don't have permission to delete information")
-    // }
-    deleteContact(id)
+  useEffect(() => {
+    dispatch({type: "GET_ALL_INFO"})
+  }, []);
 
-  }
+  const dispatch = useDispatch();
+
+  const {dataInfo, isLoading} = useSelector(state => state.InfoReducer)
+  console.log('123', dataInfo)
+
   const navigate = useNavigate();
   return (
       <div className="Table">
@@ -144,8 +91,8 @@ const BasicTable =({ contacts, deleteContact }) => {
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
-              {contacts.length > 0 ? 
-                (contacts.map((contact, id) => (
+              {dataInfo?.length > 0 ? 
+                (dataInfo.map((contact, id) => (
                 <TableRow
                   key={id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -164,7 +111,23 @@ const BasicTable =({ contacts, deleteContact }) => {
                   <TableCell align="left">
                     <span className="status" style={makeStyle1(contact.status)}>{contact.status}</span>
                   </TableCell>
-                  {user && user.role === 'Admin' && <TableCell align="left" className="Details" onClick={() => edit(contact.id)}>Edit</TableCell>}
+                  {user && user.role === 'Admin' && <TableCell align="left" className="Details" 
+                    onClick={() => 
+                      navigate(`/vehicleInformation/edit/${contact.id}`,
+                      {
+                        state: {
+                          truckPlate: contact.truckPlate,
+                          cargoType: contact.cargoType,
+                          driver: contact.driver,
+                          truckType: contact.truckType,
+                          price: contact.price,
+                          dimension: contact.dimension,
+                          parkingAddress: contact.parkingAddress,
+                          productionYear: contact.productionYear,
+                          status: contact.status,
+                        }
+                      })}
+                  >Edit</TableCell>}
                   {user && user.role === 'Admin' && <TableCell align="left" className="Delete" onClick={() => deleted(contact.id)}>Delete</TableCell>}
                 </TableRow>
               ))) : (
@@ -181,14 +144,12 @@ const BasicTable =({ contacts, deleteContact }) => {
   );
 }
 
-const mapStateToProps = (state) => ({
-  contacts: state,
-});
+const mapDispatchToProps = dispatch => {
+  return {
+      deleteinfo: (id) => {
+          dispatch(deleteInfoAction(id))
+      }
+  }
+}
 
-const mapDispatchToProps = (dispatch) => ({
-  deleteContact: (id) => {
-    dispatch({ type: "DELETE_CONTACT", payload: id });
-  },
-});
-
-export default  connect(mapStateToProps, mapDispatchToProps)(BasicTable);
+export default  connect(null, mapDispatchToProps)(BasicTable);

@@ -13,33 +13,27 @@ const EditCargo = () => {
   const { id } = useParams();
   const [cargoType, setCargoType] = useState(location.state.type);
   const navigate = useNavigate();
-  // const currentCargo = cargoTypes.find(
-  //   (cargo) => cargo.id === parseInt(id)
-  // );
-
-  // useEffect(() => {
-  //   setCargoType(currentCargo.cargoType);
-  // }, [currentCargo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const checkCargoExists = cargoTypes.filter((cargoType) => 
     // cargoTypes.cargoType === cargoType && cargoTypes.id !== currentCargo.id ? cargoType : null
     // )
-
-    if (!cargoType) {
-      return toast.warning("Please fill in all fields!!");
-    }
     // if (checkCargoExists.length > 0) {
     //   return toast.error("This Cargo Type is already exists!!");
     // }
 
+    if (!cargoType) {
+      return toast.warning("Please fill in all fields!!");
+    }
+
     const data = {
-      // id: currentCargo.id,
       cargoType,
     };
+    editCargo(id, cargoType)
+  }
 
-    // updateCargo(data);
+  const editCargo = async (id, cargoType) => {
     await axios.put(`http://localhost:8000/cargoes/${id}`, {type: cargoType})
     .then(() => {
       toast.success("Cargo Type edited successfully!!");
@@ -49,12 +43,6 @@ const EditCargo = () => {
 
   return (
     <div>
-          {/* <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          > */}
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Edit Cargo
@@ -83,14 +71,9 @@ const EditCargo = () => {
                 </div>
               </form>
             </Box>
-          {/* </Modal> */}
         </div>
   )
 }
-
-const mapStateToProps = (state) => ({
-  cargoTypes: state,
-});
 
 const mapDispatchToProps = (dispatch) => ({
   updateCargo: (data) => {
@@ -110,4 +93,4 @@ const style = {
   p: 4,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditCargo)
+export default EditCargo;

@@ -1,32 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextField } from '@mui/material';
 import { connect } from "react-redux";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from 'axios';
+import Input from '@mui/material/Input';
+import PropTypes from 'prop-types';
+import { IMaskInput } from 'react-imask';
 
-const EditVehicle = ({ contacts, updateContact }) => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const currentContact = contacts.find(
-    (contact) => contact.id === parseInt(id)
+const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
+  const { onChange, ...other } = props;
+  return (
+    <IMaskInput
+      {...other}
+      mask=" 00-00-00"
+      definitions={{
+        '#': /[1-9]/,
+      }}
+      inputRef={ref}
+      onAccept={(value) => onChange({ target: { name: props.name, value } })}
+      overwrite
+    />
   );
+});
 
-  useEffect(() => {
-    setTruckPlate(currentContact.truckPlate);
-    setCargoType(currentContact.cargoType);
-    setDriver(currentContact.driver);
-    setTruckType(currentContact.truckType);
-    setPrice(currentContact.price);
-    setDimension(currentContact.dimension);
-    setParkingAddress(currentContact.parkingAddress);
-    setProductionYear(currentContact.productionYear);
-    setStatus(currentContact.status);
-    
-  }, [currentContact]);
+TextMaskCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+const EditVehicle = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleChangeDriver = (event) => {
     setDriver(event.target.value);
@@ -36,24 +46,24 @@ const EditVehicle = ({ contacts, updateContact }) => {
     setStatus(event.target.value);
   };
 
-  const [truckPlate, setTruckPlate] = useState("");
-  const [cargoType, setCargoType] = useState([]);
-  const [driver, setDriver] = useState("");
-  const [truckType, setTruckType] = useState("");
-  const [price, setPrice] = useState("");
-  const [dimension, setDimension] = useState("");
-  const [parkingAddress, setParkingAddress] = useState("");
-  const [productionYear, setProductionYear] = useState("");
-  const [status, setStatus] = useState("");
-  const [description, setDescription] = useState("");
+  const [truckPlate, setTruckPlate] = useState(location.state.truckPlate);
+  const [cargoType, setCargoType] = useState([location.state.cargoType]);
+  const [driver, setDriver] = useState(location.state.driver);
+  const [truckType, setTruckType] = useState(location.state.truckType);
+  const [price, setPrice] = useState(location.state.price);
+  const [dimension, setDimension] = useState(location.state.dimension);
+  const [parkingAddress, setParkingAddress] = useState(location.state.parkingAddress);
+  const [productionYear, setProductionYear] = useState(location.state.productionYear);
+  const [status, setStatus] = useState(location.state.status);
+  const [description, setDescription] = useState(location?.state.description);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const checkTruckPlate = contacts.filter((contact) =>
-      contact.truckPlate === truckPlate && contact.id !== currentContact.id
-        ? contact
-        : null
-    );
+    // const checkTruckPlate = contacts.filter((contact) =>
+    //   contact.truckPlate === truckPlate && contact.id !== currentContact.id
+    //     ? contact
+    //     : null
+    // );
 
     const checkTruckPlateValidation = () => {
       const regex = /^(\d{2}[A-Z]-\d{4,5})$/;
@@ -70,11 +80,12 @@ const EditVehicle = ({ contacts, updateContact }) => {
     if (!truckPlate || !cargoType || !truckType  || !price || !dimension || !parkingAddress || !productionYear || !status) {
       return toast.warning("Please fill in all fields!!");
     }
-    if (checkTruckPlate.length > 0) {
-      return toast.error("This Truck Plate already exists!!");
-    }
+    // if (checkTruckPlate.length > 0) {
+    //   return toast.error("This Truck Plate already exists!!");
+    // }
+
     const data = {
-      id: currentContact.id,
+      // id: currentContact.id,
       truckPlate,
       cargoType,
       driver,
@@ -87,9 +98,26 @@ const EditVehicle = ({ contacts, updateContact }) => {
       description
     };
 
-    updateContact(data);
-    toast.success("Contact updated successfully!!");
-    navigate("/");
+    await axios.put(`http://localhost:8000/info/${id}`, {
+      truckPlate,
+      cargoType,
+      driver,
+      truckType,
+      price,
+      dimension,
+      parkingAddress,
+      productionYear,
+      status,
+      description
+    })
+    .then(() => {
+      toast.success("Info edited successfully!!");
+      navigate("/");
+    });
+
+    // updateContact(data);
+    // toast.success("Contact updated successfully!!");
+    // navigate("/");
   }
 
   const ITEM_HEIGHT = 48;
@@ -103,24 +131,9 @@ const EditVehicle = ({ contacts, updateContact }) => {
     },
   };
 
-  
-
-  const names = [
-    'Computer',
-    'Electronics',
-    'Vegetables',
-    'Kid toys',
-  ];
-
-  const [personName, setPersonName] = React.useState([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+  TextMaskCustom.propTypes = {
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
   };
 
   return (
@@ -145,26 +158,6 @@ const EditVehicle = ({ contacts, updateContact }) => {
           placeholder={"Cargo Type"}
           onChange={(e) => setCargoType(e.target.value)}
       />
-      {/* <FormControl sx={{ m: 1, width: 600 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Cargo Type</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
       <FormControl sx={{ m: 1, width: 600 }}>
         <InputLabel id="demo-simple-select-label">Operator</InputLabel>
         <Select
@@ -198,16 +191,19 @@ const EditVehicle = ({ contacts, updateContact }) => {
         placeholder="Price"
         onChange={(e) => setPrice(e.target.value)}
       />
-      {/* <TextField
-        style={{ width: "600px", margin: "5px" }}
-        type="text"
-        label="Dimension (L-W-H)"
-        variant="outlined"
-        placeholder="Dimension (L-W-H)"
-        value={dimension}
-        onChange={(e) => setDimension(e.target.value)}
-      /> */}
-      
+      <FormControl variant="standard">
+            <Input
+              style={{ width: "600px", margin: "5px", height: "55px" }}
+              label="Dimension (L-W-H)"
+              variant="outlined"
+              placeholder="Dimension (L-W-H)"
+              value={dimension}
+              onChange={(e) => setDimension(e.target.value)}
+              name="dimension"
+              id="formatted-text-mask-input"
+              inputComponent={TextMaskCustom}
+            />
+          </FormControl>
       <TextField
         style={{ width: "600px", margin: "5px" }}
         type="text"
@@ -263,15 +259,11 @@ const EditVehicle = ({ contacts, updateContact }) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  contacts: state,
-});
-
 const mapDispatchToProps = (dispatch) => ({
   updateContact: (data) => {
     dispatch({ type: "UPDATE_CONTACT", payload: data });
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditVehicle)
+export default EditVehicle;
 
