@@ -45,11 +45,68 @@
       "type": "Vegetables"
     },
     {
-      "type": "Kid toys",
+      "type": "Kid toy",
       "id": 4
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "info": [
+    {
+      "truckPlate": "30A-50493",
+      "cargoType": [
+        [
+          [
+            "Computer"
+          ]
+        ]
+      ],
+      "driver": "Lisa",
+      "truckType": "500",
+      "price": "1000000000",
+      "dimension": " 10-21-5",
+      "parkingAddress": "No.128 Hoàn Kiếm, HN",
+      "productionYear": "2012",
+      "status": "New",
+      "id": 1
+    },
+    {
+      "truckPlate": "12A-50493",
+      "cargoType": [
+        "Computer"
+      ],
+      "driver": "Lisa",
+      "truckType": "5",
+      "price": "1000000000",
+      "dimension": " 10-21-5",
+      "parkingAddress": "No.128 Hoàn Kiếm, HN",
+      "productionYear": "2012",
+      "status": "In-used",
+      "id": 2
+    },
+    {
+      "truckPlate": "12A-1222",
+      "cargoType": [
+        [
+          [
+            [
+              [
+                [
+                  [
+                    "Computer"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "driver": "Invoker",
+      "truckType": 123,
+      "price": "1000000000",
+      "dimension": " 12-31-23",
+      "parkingAddress": "No.128 Hoàn Kiếm, HN",
+      "productionYear": "2011",
+      "status": "Suspended",
+      "id": 3
+    }
+  ]
 }

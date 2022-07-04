@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from 'axios';
 import { toast } from "react-toastify";
+import {useDispatch, useSelector } from "react-redux";
+import { Types } from '../redux/saga/Types/UserType';
+import { deleteUserAction } from '../redux/saga/actions/UserAction';
 
 const makeStyle1=(role)=>{
   if(role === 'Admin')
@@ -50,16 +53,17 @@ const UserManagement = () => {
   }
 
   useEffect(() => {
-    getUsers();
-    console.log('test', users)
-  }, [])
+    dispatch({type: "GET_ALL_USER"})
+  }, []);
+
+  const {dataUser, isLoading} = useSelector(state => state.UserReducer)
+  console.log('dataUser', dataUser)
 
   const deleteUser = async (id) => {
-    await axios.delete(`http://localhost:8000/users/${id}`)
-    .then(() => {
-      toast.success("Users deleted successfully!!");
-      getUsers()
-    });
+    dispatch(deleteUserAction(id))
+    await getUsers()
+    dispatch({type: "GET_ALL_USER"})
+    toast.success("User deleted successfully!!");
   }
 
   const [user, setUser] = useState();
@@ -71,6 +75,8 @@ const UserManagement = () => {
     }
     console.log("user", user)
   }, []);
+
+  const dispatch = useDispatch();
 
   return (
     <div className="Table">
@@ -92,10 +98,10 @@ const UserManagement = () => {
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
-              {users.length > 0 ? 
-                (users.map((user, id) => (
+              {dataUser?.length > 0 ? 
+                (dataUser.map((user) => (
                 <TableRow
-                  key={id}
+                  key={user.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="left">{user.id + 1}</TableCell>
@@ -140,14 +146,4 @@ const UserManagement = () => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  users: state,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  deleteUser: (id) => {
-    dispatch({ type: "DELETE_USER", payload: id });
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagement)
+export default UserManagement;

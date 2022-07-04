@@ -30,9 +30,6 @@ const EditUserManagement = (props) => {
 
   useEffect(() => {
     getUserById(id);
-    console.log('test', user?.name)
-    console.log('id', id)
-    console.log('location', location)
   }, []);
 
   const getUserById = async (id) => {
@@ -45,10 +42,6 @@ const EditUserManagement = (props) => {
       console.log(error);
     });    
   }
-
-  const handleChangeRole = (event) => {
-    setRole(event.target.value);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,7 +75,7 @@ const EditUserManagement = (props) => {
       image: image ? image : user.image
     })
     .then(() => {
-      toast.success("Users edited successfully!!");
+      toast.success("User edited successfully!!");
       navigate("/userManagement");
     });
     
@@ -175,14 +168,10 @@ const EditUserManagement = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  users: state,
-});
-
 const mapDispatchToProps = (dispatch) => ({
   updateUser: (data) => {
     dispatch({ type: "UPDATE_USER", payload: data });
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditUserManagement);
+export default EditUserManagement;

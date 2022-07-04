@@ -16,6 +16,10 @@ import { connect } from "react-redux";
 import { TextField } from '@mui/material';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import {useDispatch, useSelector } from "react-redux";
+import CircularProgress from '@mui/material/CircularProgress';
+
+import { addTaskAction, deleteTaskAction } from '../redux/saga/actions/CargoAction';
 
 const CargoType = () => {
   const navigate = useNavigate();
@@ -37,18 +41,14 @@ const CargoType = () => {
   }
 
   useEffect(() => {
-    getCargoes();
-  }, [])
+    dispatch({type: "GET_ALL_CARGO"})
+  }, []);
 
   const deleteCargo = async (id) => {
-    await axios.delete(`http://localhost:8000/cargoes/${id}`)
-    .then(() => {
-      toast.success("Cargo deleted successfully!!");
-      getCargoes()
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    dispatch(deleteTaskAction(id))
+    await getCargoes()
+    dispatch({type: "GET_ALL_CARGO"})
+    toast.success("Cargo deleted successfully!!");
   }
 
   const handleSubmit = async (e) => {
@@ -56,33 +56,23 @@ const CargoType = () => {
     // const checkCargoTypeExists = cargoTypes.filter((cargoType) => 
     //   cargoType.cargoType === cargoType ? cargoType : null
     // )
-
-    if (!type) {
-      return toast.warning("Please fill in the fields!!");
-    }
     // if (checkCargoTypeExists.length > 0) {
     //   return toast.error("This Cargo Type already exists!!");
     // }
 
-    // const data = {
-    //   id: cargoTypes.length > 0 ? cargoTypes[cargoTypes.length - 1].id + 1 : 0,
-    //   cargoTypes,
-    // };
+    if (!type) {
+      return toast.warning("Please fill in the fields!!");
+    }
 
-    // addCargo(data);
-    await axios.post('http://localhost:8000/cargoes', 
-      {type}
-    )
-    .then(() => {
-      toast.success("Cargo Type added successfully!!");
-      getCargoes()
-    })
-    .catch((err) => {
-      toast.error("Cargo Type added fail!!");
-      console.log('err', err)
-    })
+    const data = {
+      type,
+    };
+
+    dispatch(addTaskAction(data));
+    toast.success("Cargo Type added successfully!!");
+    dispatch({type: "GET_ALL_CARGO"})
     setType('')
-    setOpen(false)
+    setOpen(false) 
   }
 
   const [user, setUser] = useState();
@@ -95,10 +85,22 @@ const CargoType = () => {
     console.log("user", user)
   }, []);
 
+  const dispatch = useDispatch();
+
+  const {dataCargo, isLoading} = useSelector(state => state.CargoReducer)
+  console.log('123', dataCargo)
+
 
   return (
+
     <div className="Table">
       <h1 style={{textAlign: 'center', marginTop: "80px"}}>Cargo Types</h1>
+        {isLoading ? (
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+        ) 
+        : (<>
         <TableContainer
           component={Paper}
           style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
@@ -114,8 +116,8 @@ const CargoType = () => {
               </TableRow>
             </TableHead>
             <TableBody style={{ color: "white" }}>
-            {cargoTypes.length > 0 ? 
-                (cargoTypes.map((type, id) => (
+            {dataCargo?.length > 0 ? 
+                (dataCargo.map((type, id) => (
                 <TableRow
                   key={id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -146,6 +148,7 @@ const CargoType = () => {
             </TableBody>
             </Table>
         </TableContainer>
+        </>)}
         <div>
           <Modal
             open={open}
@@ -187,22 +190,6 @@ const CargoType = () => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  cargoTypes: state,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  deleteCargo: (id) => {
-    dispatch({ type: "DELETE_CARGO", payload: id });
-  },
-  addCargo: (data) => {
-    dispatch({ type: 'ADD_CARGO', payload: data });
-  },
-  updateCargo: (data) => {
-    dispatch({ type: 'UPDATE_CARGO', payload: data });
-  },
-});
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -215,6 +202,6 @@ const style = {
   p: 4,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CargoType);
+export default CargoType;
 
 
